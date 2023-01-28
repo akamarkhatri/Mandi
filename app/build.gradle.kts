@@ -1,15 +1,16 @@
 plugins {
     id ("com.android.application")
-    id ("kotlin-android")
+    id("org.jetbrains.kotlin.android")
+    kotlin("kapt")
 }
 
 android {
     namespace = "com.mandi"
-    compileSdk = libs.versions.compileSdk.get().toInt()
+    compileSdk = AndroidConfig.compileSdkVersion
     defaultConfig {
-        applicationId = "com.example.jetnews"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
+        applicationId = "com.mandi"
+        minSdk = AndroidConfig.minSdkVersion
+        targetSdk = AndroidConfig.minSdkVersion
         versionCode = 1
         versionName = "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -36,81 +37,78 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+        kotlinCompilerExtensionVersion = Versions.composeCompiler
     }
     packagingOptions {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
+//        resources.excludes += "META-INF/*.kotlin_module"
     }
 }
-
+val compose_ui_version = "1.1.1"
+//    rootProject.extra.get("compose_ui_version") as String
 dependencies {
-    implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlinx.coroutines.android)
+    implementation(Deps.androidx.appcompat)
+//    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation(Deps.androidx.composeActivity)
+    implementation(platform(Deps.androidx.composeBom))
+    for (lib in Deps.androidx.compose) {
+        implementation(lib)
+    }
+    implementation(Deps.androidx.constraintLayoutCompose)
+    implementation(Deps.androidx.core)
+    implementation(Deps.androidx.lifecycleViewModelKtx)
+    implementation(Deps.androidx.lifecycleViewModelCompose)
+    implementation(Deps.androidx.test.espressoIdlingResources)
+    implementation(Deps.coil.coilCore)
+    implementation(Deps.coil.coilSvg)
+    implementation(Deps.coil.coilCompose)
+    implementation(Deps.kotlinx.coroutines.android)
+    implementation(Deps.kotlinx.serialization.jvm)
+    implementation(Deps.ktor.plugin.json.jvm)
 
-    implementation(libs.androidx.compose.animation)
-    implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.compose.material.iconsExtended)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.materialWindow)
-    implementation(libs.androidx.compose.runtime.livedata)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    debugImplementation(libs.androidx.compose.ui.tooling)
+    for (lib in Deps.androidx.composeDebug) {
+        debugImplementation(lib)
+    }
 
-    /*implementation(libs.accompanist.swiperefresh)
-    implementation(libs.accompanist.systemuicontroller)*/
+    for (lib in Deps.androidx.test.all) {
+        androidTestImplementation(lib)
+    }
+    for (lib in Deps.androidx.test.espresso) {
+        androidTestImplementation(lib)
+    }
+    androidTestImplementation(platform(Deps.androidx.composeBom))
+    androidTestImplementation(Deps.androidx.test.composeTest)
 
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity.ktx)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.activity.compose)
+    androidTestImplementation(Deps.okhttp)
+    androidTestImplementation(Deps.ktor.client.jvm)
+    androidTestImplementation(Deps.ktor.plugin.json.jvm)
+    androidTestImplementation(Deps.ktor.plugin.logging.jvm)
+    androidTestImplementation(Deps.ktor.plugin.serialization.common)
+    androidTestImplementation(Deps.ktor.plugin.serialization.content)
+    androidTestImplementation(Deps.ktor.plugin.serialization.jvm)
+    androidTestUtil(Deps.androidx.test.orchestrator)
 
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.savedstate)
-    implementation(libs.androidx.lifecycle.livedata.ktx)
-    implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.window)
-
-    implementation(libs.google.android.material)
-
-    androidTestImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.core)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.test.rules)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.kotlinx.coroutines.test)
-    androidTestImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    // Robolectric dependencies
-    testImplementation(libs.androidx.compose.ui.test.junit4)
-    testImplementation(libs.robolectric)
-    /*implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
-    implementation 'androidx.activity:activity-compose:1.3.1'
-    implementation "androidx.compose.ui:ui:$compose_ui_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_ui_version"
-    implementation 'androidx.compose.material:material:1.1.1'
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_ui_version"
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"*/
+    /*implementation("androidx.core:core-ktx:1.9.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation("androidx.compose.ui:ui:$compose_ui_version")
+    implementation("androidx.compose.ui:ui-tooling-preview:$compose_ui_version")
+    implementation("androidx.compose.material:material:1.3.1")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_ui_version")
+    debugImplementation("androidx.compose.ui:ui-tooling:$compose_ui_version")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_ui_version")*/
 }
 
-tasks.withType<Test>().configureEach {
-    systemProperties.put("robolectric.logging", "stdout")
-}
