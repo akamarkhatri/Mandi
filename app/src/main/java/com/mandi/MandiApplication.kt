@@ -1,14 +1,14 @@
 package com.mandi
 
 import android.app.Application
-import com.mandi.data.AppContainer
-import com.mandi.data.FakeAppContainer
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class MandiApplication: Application() {
-    lateinit var appContainer: AppContainer
+//    lateinit var appContainer: AppContainer
 
     override fun onCreate() {
         super.onCreate()
-        appContainer = FakeAppContainer()
+//        appContainer = FakeAppContainer()
     }
 }

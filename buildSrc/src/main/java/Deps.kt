@@ -16,12 +16,17 @@ object Versions {
     const val kotlinxCoroutines = "1.6.4"
     const val kotlinxSerialization = "1.4.1"
     const val ktor = "2.1.2"
+    const val hiltNavigationCompose = "1.0.0"
+    const val androidNavigationCompose = "2.5.3"
+    const val hilt = "2.43.2"
+    const val hiltExt = "1.0.0"
 }
 
 object Plugins {
     const val android = "com.android.tools.build:gradle:7.3.0"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinSerialization = "org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}"
+    const val hilt = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"
 }
 
 object Deps {
@@ -45,6 +50,8 @@ class AndroidDeps internal constructor() {
     val robolectric = "org.robolectric:robolectric:4.8.2"
     val playCore = "com.google.android.play:core:1.6.1"
     val material = "com.google.android.material:material:1.5.0"
+    val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"
+    val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
 //    val playServices = PlayServicesDeps()
 }
 
@@ -71,6 +78,11 @@ class AndroidXDeps internal constructor() {
     val core = "androidx.core:core-ktx:1.9.0"
     val dynamicAnimation = "androidx.dynamicanimation:dynamicanimation:1.0.0"
     val exifInterface = "androidx.exifinterface:exifinterface:1.3.5"
+    val hiltAndroidXNavigationCompose = listOf<String>(
+        "androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}",
+        "androidx.navigation:navigation-compose:${Versions.androidNavigationCompose}"
+    )
+//    val hiltCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltExt}"
     val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     val lifecycleViewModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
     val media = "androidx.media:media:1.6.0"

@@ -2,6 +2,7 @@ plugins {
     id ("com.android.application")
     id("org.jetbrains.kotlin.android")
     kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -86,6 +87,20 @@ dependencies {
     for (lib in Deps.androidx.test.espresso) {
         androidTestImplementation(lib)
     }
+    /*hilt*/
+//    kapt(Deps.androidx.hiltCompiler)
+
+    implementation(Deps.android.hiltAndroid)
+    kapt(Deps.android.hiltCompiler)
+    for (lib in Deps.androidx.hiltAndroidXNavigationCompose) {
+        implementation(lib)
+    }
+//    implementation("androidx.navigation:navigation-compose:2.5.3")
+    // Dagger Hilt
+    /*implementation("com.google.dagger:hilt-android:${Versions.hilt}")
+    kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
+    implementation("androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationCompose}")*/
+
     androidTestImplementation(platform(Deps.androidx.composeBom))
     androidTestImplementation(Deps.androidx.test.composeTest)
 
