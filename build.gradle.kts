@@ -15,6 +15,7 @@ buildscript {
         classpath(Plugins.kotlin)
         classpath(Plugins.kotlinSerialization)
         classpath(Plugins.hilt)
+        classpath(Plugins.navArgument)
     }
 }
 // Top-level build file where you can add configuration options common to all sub-projects/modules.

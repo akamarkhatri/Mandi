@@ -1,29 +1,22 @@
 package com.mandi.ui.navigation
 
 import androidx.navigation.NavController
-import com.mandi.ui.navigation.Destinations.SELLING_COMPLETE
-import com.mandi.ui.navigation.Destinations.SELLING_SCREEN
-
-object Destinations{
-    const val SELLING_SCREEN = "selling_screen"
-    const val SELLING_COMPLETE = "selling_complete"
-}
+import com.google.gson.Gson
 
 class NavigationActions(navController: NavController) {
     val navToSellingScreen: () -> Unit = {
-        navController.navigate(Destinations.SELLING_SCREEN) {
+        navController.navigate(AppDestination.SellingScreen.route) {
             launchSingleTop = true
-            restoreState = true
-            popUpTo(SELLING_COMPLETE) {
+            popUpTo(AppDestination.SellingComplete.routeWithArgs){
                 this.inclusive = true
             }
         }
     }
 
     val navToSellingComplete: (sellerInventoryInfo: SellerInventoryInfo) ->Unit = {
-        navController.navigate(Destinations.SELLING_COMPLETE) {
+        navController.navigate("${AppDestination.SellingComplete.route}/${Gson().toJson(it)}") {
             launchSingleTop = true
-            popUpTo(SELLING_SCREEN) {
+            popUpTo(AppDestination.SellingScreen.route) {
                 this.inclusive = true
             }
         }

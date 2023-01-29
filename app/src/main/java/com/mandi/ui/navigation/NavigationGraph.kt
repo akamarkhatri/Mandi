@@ -8,6 +8,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.gson.Gson
 import com.mandi.ui.selling.SellingScreen
 import com.mandi.ui.selling.SellingViewModel
 import com.mandi.ui.sellingcomplete.SellingComplete
@@ -17,19 +18,22 @@ import com.mandi.ui.sellingcomplete.SellingCompleteViewModel
 fun MandiAppNavGraph(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = Destinations.SELLING_SCREEN,
+    startDestination: String = AppDestination.SellingScreen.route,
 ) {
     val navigationActions = remember(navController) {
         NavigationActions(navController)
     }
     NavHost(navController = navController, startDestination =  startDestination, modifier = modifier) {
-        composable(Destinations.SELLING_SCREEN) {
+        composable(AppDestination.SellingScreen.route) {
             val sellingViewModel: SellingViewModel = hiltViewModel()
             SellingScreen(sellingViewModel = sellingViewModel, navigationActions)
         }
-        composable(Destinations.SELLING_COMPLETE) {
+        composable(route = AppDestination.SellingComplete.routeWithArgs,
+            arguments = AppDestination.SellingComplete.arguments) {
             val sellingCompleteViewModel: SellingCompleteViewModel = hiltViewModel()
-            SellingComplete(sellingCompleteViewModel = sellingCompleteViewModel, navigationActions)
+            val sellerInventoryInfo =
+                Gson().fromJson(it.arguments?.getString(AppDestination.SellingComplete.KEY_INVENTORY_INFO), SellerInventoryInfo::class.java)
+            SellingComplete(sellingCompleteViewModel = sellingCompleteViewModel, navigationActions, sellerInventoryInfo)
         }
     }
 }

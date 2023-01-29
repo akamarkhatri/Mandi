@@ -20,6 +20,7 @@ object Versions {
     const val androidNavigationCompose = "2.5.3"
     const val hilt = "2.43.2"
     const val hiltExt = "1.0.0"
+    const val gson = "2.9.0"
 }
 
 object Plugins {
@@ -27,6 +28,7 @@ object Plugins {
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
     const val kotlinSerialization = "org.jetbrains.kotlin:kotlin-serialization:${Versions.kotlin}"
     const val hilt = "com.google.dagger:hilt-android-gradle-plugin:${Versions.hilt}"
+    const val navArgument = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.androidNavigationCompose}"
 }
 
 object Deps {
@@ -44,6 +46,7 @@ object Deps {
     const val mpAndroidChart = "com.github.PhilJay:MPAndroidChart:v3.1.0"
     const val okhttp = "com.squareup.okhttp3:okhttp:4.10.0"
     const val shimmer = "com.facebook.shimmer:shimmer:0.4.0"
+    const val gson = "com.google.code.gson:gson:${Versions.gson}"
 }
 
 class AndroidDeps internal constructor() {

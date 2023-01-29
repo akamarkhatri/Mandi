@@ -12,11 +12,13 @@ import com.mandi.ui.navigation.SellerInventoryInfo
 @Composable
 fun SellingComplete(
     sellingCompleteViewModel: SellingCompleteViewModel,
-    navigationActions: NavigationActions
+    navigationActions: NavigationActions,
+    sellerInventoryInfo: SellerInventoryInfo?
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
 //        Greeting(name = "SellingScreen")
 
+        Text(text = "Thanks! $sellerInventoryInfo")
         Button(onClick = navigationActions.navToSellingScreen) {
             Text(text = "Selling Complete Screen Click Me to Go Selling Screen")
         }
