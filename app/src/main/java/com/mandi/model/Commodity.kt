@@ -2,7 +2,7 @@ package com.mandi.model
 
 enum class CommodityType {
     Fruit,
-    Village
+    Vegetable
 }
 enum class CommodityMeasurementType {
     Dozen,
