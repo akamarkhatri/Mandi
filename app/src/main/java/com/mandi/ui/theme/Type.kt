@@ -8,8 +8,48 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 // Set of Material typography styles to start with
-val Typography = Typography(
+val typography = Typography(
     bodyLarge = TextStyle(
+        color = CharcoalDark,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp
+    ),
+    bodyMedium = TextStyle(
+        color = CharcoalDark,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 14.sp
+    ),
+    bodySmall = TextStyle(
+        color = CharcoalDark,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
+    ),
+    headlineLarge = TextStyle(
+        color = CharcoalDark,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 28.sp,
+        lineHeight = 32.sp
+    ),
+    headlineMedium = TextStyle(
+        color = CharcoalDark,
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Normal,
+        fontSize = 24.sp,
+        lineHeight = 32.sp
+    ),
+     headlineSmall = TextStyle(
+         color = CharcoalDark,
+         fontFamily = FontFamily.Default,
+         fontWeight = FontWeight.Normal,
+         fontSize = 20.sp,
+         lineHeight = 32.sp
+     ),
+    titleMedium = TextStyle(
+        color = CharcoalDark,
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp

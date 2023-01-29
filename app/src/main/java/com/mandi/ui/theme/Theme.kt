@@ -1,7 +1,6 @@
 package com.mandi.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -18,8 +17,8 @@ private val DarkColorPalette = darkColorScheme(
 )
 
 private val LightColorPalette = lightColorScheme(
-    primary = Purple500,
-    primaryContainer = Purple700,
+    primary = GreenDark,
+    primaryContainer = Color.White,
     secondary = Teal200
 
     /* Other default colors to override
@@ -42,7 +41,7 @@ fun MandiTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable 
 
     MaterialTheme(
         colorScheme = colors,
-        typography = Typography,
+        typography = typography,
         shapes = Shapes,
         content = content
     )
