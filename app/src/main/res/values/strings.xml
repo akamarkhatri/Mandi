@@ -1,6 +1,17 @@
 <resources>
     <string name="app_name">Mandi</string>
+    <string name="applied_loyality_index">Applied Loyality Index %1$.00f</string>
+    <string name="dozens">Dozen</string>
+    <string name="gross_weight">Gross Weight</string>
+    <string name="gross_price">Gross Price</string>
+    <string name="x_inr">%1%$s INR</string>
+    <string name="loyality_card_identifier">Loyalty Card Identifier</string>
     <string name="please_ensure_you_received_x_y_for_z_measure_of_your_produce">Please ensure you received %1$.00f %2$s for %3$.00f %4$s of your produce.</string>
     <string name="sell_more">Sell More</string>
+    <string name="sell_my_produce">Sell My Produce</string>
+    <string name="seller_name">Seller Name</string>
     <string name="thank_you_x_for_selling_your_quality_produce">Thank you %1$s for selling your quality produce.</string>
+    <string name="tonnes">Tonnes</string>
+    <string name="village">Village</string>
+    <string name="x_of_x_characters">%1$s of %2$s characters</string>
 </resources>

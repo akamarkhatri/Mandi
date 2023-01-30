@@ -90,6 +90,7 @@ dependencies {
     }
 
     implementation(Deps.android.hiltAndroid)
+    testImplementation(Deps.junit)
     kapt(Deps.android.hiltCompiler)
     for (lib in Deps.androidx.hiltAndroidXNavigationCompose) {
         implementation(lib)

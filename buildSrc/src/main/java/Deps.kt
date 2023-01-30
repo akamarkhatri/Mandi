@@ -21,6 +21,7 @@ object Versions {
     const val hilt = "2.43.2"
     const val hiltExt = "1.0.0"
     const val gson = "2.9.0"
+    const val jUnit = "4.13.2"
 }
 
 object Plugins {
@@ -47,6 +48,7 @@ object Deps {
     const val okhttp = "com.squareup.okhttp3:okhttp:4.10.0"
     const val shimmer = "com.facebook.shimmer:shimmer:0.4.0"
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
+    const val junit = "junit:junit:${Versions.jUnit}"
 }
 
 class AndroidDeps internal constructor() {
