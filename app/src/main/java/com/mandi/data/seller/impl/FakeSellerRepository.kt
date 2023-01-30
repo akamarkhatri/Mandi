@@ -9,17 +9,26 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class FakeSellerRepository : SellerRepository {
-    override suspend fun getSeller(name: String?, loyalityCardId: String?): Result<List<Seller>> =
+    override suspend fun getSellerById(loyalityCardId: String): Result<List<Seller>> =
         withContext(Dispatchers.IO) {
-            name?.let { name -> Result.Success(allSellers.filter { it.name.contains(name) }) }
-                ?: loyalityCardId?.let{ cardId ->
+                loyalityCardId.let{ cardId ->
                         allSellers.filter { it.sellerRegistrationInfo.type == SellerRegistrationType.Register }
                             .firstOrNull {
-                                (it.sellerRegistrationInfo as SellerRegistrationInfo.Register).loyalityCardId == cardId
+                                (it.sellerRegistrationInfo as SellerRegistrationInfo.Register).loyalityCardId.equals(cardId, ignoreCase = true)
                             }?.let { Result.Success(listOf(it)) }
                 }
                 ?: Result.Error(IllegalArgumentException("Unable to find Seller"))
         }
+
+    override suspend fun getSellerByName(name: String): Result<List<Seller>> =
+        withContext(Dispatchers.IO) {
+                val sellerList = allSellers.filter { it.name.contains(name,true) }
+                if (sellerList.isEmpty()) {
+                    null
+                } else {
+                    Result.Success(sellerList)
+                }
+            } ?: Result.Error(IllegalArgumentException("Unable to find Seller"))
 }
 
 private val allSellers: List<Seller> by lazy {

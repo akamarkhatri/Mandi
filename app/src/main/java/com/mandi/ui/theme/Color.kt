@@ -17,6 +17,7 @@ val GreenLight = Color(0x330DC714)
 val GreenDark = Color(0xFF0CA812)
 val Grenadier = Color(0xFFCD3C3C)
 val Neutral50 = Color(0xFF808080)
+val SemiTransparent = Color(0x50000000)
 
 
 @Composable

@@ -9,7 +9,7 @@ val village1 by lazy {
         postalCode = "208012",
         name = "Ramnagar",
         sellingCommoditiesList = listOf(
-            SellingCommodityInfo(commodityDetail = apple, pricePerMeasurementType = 200f ),
+            SellingCommodityInfo(commodityDetail = apple, pricePerMeasurementType = 200.1110333f ),
             SellingCommodityInfo(commodityDetail = orange, pricePerMeasurementType = 180f ),
             SellingCommodityInfo(commodityDetail = banana, pricePerMeasurementType = 60f )
         )
@@ -21,7 +21,7 @@ val village2 by lazy {
         postalCode = "205011",
         name = "Ramgarh",
         sellingCommoditiesList = listOf(
-            SellingCommodityInfo(commodityDetail = apple, pricePerMeasurementType = 300f ),
+            SellingCommodityInfo(commodityDetail = apple, pricePerMeasurementType = 300.444454f ),
             SellingCommodityInfo(commodityDetail = orange, pricePerMeasurementType = 200f ),
             SellingCommodityInfo(commodityDetail = banana, pricePerMeasurementType = 100f ),
             SellingCommodityInfo(commodityDetail = tomato, pricePerMeasurementType = 20f ),

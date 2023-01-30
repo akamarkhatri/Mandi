@@ -90,6 +90,8 @@ class AndroidXDeps internal constructor() {
 //    val hiltCompiler = "androidx.hilt:hilt-compiler:${Versions.hiltExt}"
     val lifecycleViewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     val lifecycleViewModelCompose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+    val lifeCycleRuntimeCompose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha01"
+    val lifeCycleRuntimeComposektx = "androidx.lifecycle:lifecycle-runtime-ktx:2.6.0-alpha01"
     val media = "androidx.media:media:1.6.0"
     val recyclerView = "androidx.recyclerview:recyclerview:1.3.0-rc01"
     val test = AndroidXTestDeps()

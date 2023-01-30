@@ -1,12 +1,20 @@
 <resources>
     <string name="app_name">Mandi</string>
-    <string name="applied_loyality_index">Applied Loyality Index %1$.00f</string>
+    <string name="applied_loyality_index">Applied Loyality Index %1$.2f</string>
+    <string name="calculate_gross_value">Calculate Gross Value</string>
+    <string name="commodity">Commodity</string>
     <string name="dozens">Dozen</string>
+    <string name="kg">Kg</string>
     <string name="gross_weight">Gross Weight</string>
     <string name="gross_price">Gross Price</string>
     <string name="x_inr">%1%$s INR</string>
     <string name="loyality_card_identifier">Loyalty Card Identifier</string>
-    <string name="please_ensure_you_received_x_y_for_z_measure_of_your_produce">Please ensure you received %1$.00f %2$s for %3$.00f %4$s of your produce.</string>
+    <string name="please_ensure_you_received_x_y_for_z_measure_of_your_produce">Please ensure you received %1$s %2$s for %3$.2f %4$s of your produce.</string>
+    <string name="err_seller_not_exist">Error: Seller not exit</string>
+    <string name="err_loyality_card_id_not_exist">Error: Card ID not exit.</string>
+    <string name="select_commodity_to_sell">Select Commodity To Sell</string>
+    <string name="select_seller">Select Seller</string>
+    <string name="select_village">Select Village</string>
     <string name="sell_more">Sell More</string>
     <string name="sell_my_produce">Sell My Produce</string>
     <string name="seller_name">Seller Name</string>
@@ -14,4 +22,5 @@
     <string name="tonnes">Tonnes</string>
     <string name="village">Village</string>
     <string name="x_of_x_characters">%1$s of %2$s characters</string>
+    <string name="x_y_per_z_unit">%1$s - %2$.2f per %3$s</string>
 </resources>

@@ -68,6 +68,8 @@ dependencies {
     }
     implementation(Deps.androidx.constraintLayoutCompose)
     implementation(Deps.androidx.core)
+    implementation(Deps.androidx.lifeCycleRuntimeCompose)
+    implementation(Deps.androidx.lifeCycleRuntimeComposektx)
     implementation(Deps.androidx.lifecycleViewModelKtx)
     implementation(Deps.androidx.lifecycleViewModelCompose)
     implementation(Deps.androidx.test.espressoIdlingResources)

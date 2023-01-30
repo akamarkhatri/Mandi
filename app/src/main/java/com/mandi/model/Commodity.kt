@@ -1,12 +1,21 @@
 package com.mandi.model
 
+import com.mandi.R
+
 enum class CommodityType {
     Fruit,
     Vegetable
 }
 enum class CommodityMeasurementType {
     Dozen,
-    Killogram
+    Killogram;
+
+    fun getMesurementTypeNameResId(): Int {
+        return when (this) {
+            Dozen -> R.string.dozens
+            Killogram -> R.string.tonnes
+        }
+    }
 }
 
 data class CommodityDetail(

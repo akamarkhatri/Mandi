@@ -1,6 +1,13 @@
 package com.mandi.model
 
-data class Seller(val id: String, val name: String, val sellerRegistrationInfo: SellerRegistrationInfo)
+data class Seller(val id: String, val name: String, val sellerRegistrationInfo: SellerRegistrationInfo) {
+    fun getLoyalityCardId():String {
+        return when(sellerRegistrationInfo) {
+            is SellerRegistrationInfo.Register -> sellerRegistrationInfo.loyalityCardId
+            is SellerRegistrationInfo.Unregister -> ""
+        }
+    }
+}
 enum class SellerRegistrationType {
     Register,
     UnRegister
