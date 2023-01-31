@@ -79,40 +79,38 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
                 }
                 is Result.Success -> {
                     val sellerList = result.data
-                    when (sellerList.size) {
-                        1 -> {
-                            val seller = sellerList.first()
-                            val loyalityCardId = when (seller.sellerRegistrationInfo) {
-                                is SellerRegistrationInfo.Register -> seller.sellerRegistrationInfo.loyalityCardId
-                                is SellerRegistrationInfo.Unregister -> ""
-                            }
-                            state.update {
-                                it.copy(
-                                    isLoading = false,
-                                    sellerInfo = seller,
-                                    isSellerSelected = true,
-                                    sellerList = listOf(),
-                                    moreThanOneSellerFound = false,
-                                    sellerNameValue = TextFieldValue(text = seller.name,
-                                        selection = TextRange(seller.name.length)),
-                                    sellerLoyalityCardValue = TextFieldValue(text = loyalityCardId,
-                                        selection = TextRange(loyalityCardId.length)),
-                                    grossValue = null,
-                                    errorSet = removeError(SellingScreenErrorType.SELLER_NOT_FOUND)
-                                )
-                            }
+                    if (sellerList.size == 1) {
+                        val seller = sellerList.first()
+                        val loyalityCardId = when (seller.sellerRegistrationInfo) {
+                            is SellerRegistrationInfo.Register -> seller.sellerRegistrationInfo.loyalityCardId
+                            is SellerRegistrationInfo.Unregister -> ""
                         }
-                        else -> {
-                            state.update {
-                                it.copy(
-                                    isLoading = false,
-                                    sellerInfo = null,
-                                    isSellerSelected = false,
-                                    sellerList = sellerList,
-                                    moreThanOneSellerFound = true,
-                                    grossValue = null
-                                )
-                            }
+                        state.update {
+                            it.copy(
+                                isLoading = false,
+                                sellerInfo = seller,
+                                isSellerSelected = true,
+                                sellerList = sellerList,
+                                moreThanOneSellerFound = false,
+                                sellerNameValue = TextFieldValue(text = seller.name,
+                                    selection = TextRange(seller.name.length)),
+                                sellerLoyalityCardValue = TextFieldValue(text = loyalityCardId,
+                                    selection = TextRange(loyalityCardId.length)),
+                                grossValue = null,
+                                errorSet = removeError(SellingScreenErrorType.SELLER_NOT_FOUND)
+                            )
+                        }
+                    }
+                    else {
+                        state.update {
+                            it.copy(
+                                isLoading = false,
+                                sellerInfo = null,
+                                isSellerSelected = false,
+                                sellerList = sellerList,
+                                moreThanOneSellerFound = true,
+                                grossValue = null
+                            )
                         }
                     }
                 }
@@ -148,10 +146,13 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
                     it.copy(
                         sellerNameValue = textFieldValue,
                         isSellerSelected = false,
-                        sellerList = listOf(),
-                        moreThanOneSellerFound = false,
                         grossValue = null
-                    )
+                    ).apply {
+                        if (moreThanOneSellerFound.not()) {
+                            sellerList = listOf()
+                            moreThanOneSellerFound = false
+                        }
+                    }
                 }
             }
             TextFieldValueType.LoyalityCard -> {
@@ -159,10 +160,13 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
                     it.copy(
                         isSellerSelected = false,
                         sellerLoyalityCardValue = textFieldValue,
-                        sellerList = listOf(),
-                        moreThanOneSellerFound = false,
                         grossValue = null
-                    )
+                    ).apply {
+                        if (moreThanOneSellerFound.not()) {
+                            sellerList = listOf()
+                            moreThanOneSellerFound = false
+                        }
+                    }
                 }
             }
             TextFieldValueType.GrossWt -> {
@@ -309,6 +313,7 @@ data class SellingScreenState(
     var selectedCommodityInfo: SellingCommodityInfo? = null,
     var grossValue: Float? = null,
     val errorSet: Set<SellingScreenErrorType>? = null,
+    val canShowSellerListBottomSheet: Boolean = false
 
     )
 

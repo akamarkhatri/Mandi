@@ -41,7 +41,7 @@ import com.mandi.ui.theme.typography
 import com.mandi.util.numberFormat
 import java.util.*
 
-@OptIn(ExperimentalLifecycleComposeApi::class)
+@OptIn(ExperimentalLifecycleComposeApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SellingScreen(sellingViewModel: SellingViewModel, navigationActions: NavigationActions) {
     Column(modifier = Modifier
@@ -69,14 +69,17 @@ fun SellingScreen(sellingViewModel: SellingViewModel, navigationActions: Navigat
                 }
             }
             if (state.moreThanOneSellerFound) {
+                LocalSoftwareKeyboardController.current?.hide()
                 RenderSellersBottomSheet(state, sellingViewModel.event)
             }
 
             if (state.canShowVillageBottomSheet) {
+                LocalSoftwareKeyboardController.current?.hide()
                 RenderVillageBottomSheet(state, sellingViewModel.event)
             }
 
             if (state.canShowCommodityBottomSheet) {
+                LocalSoftwareKeyboardController.current?.hide()
                 RenderCommodityBottomSheet(state, sellingViewModel.event)
             }
         }
