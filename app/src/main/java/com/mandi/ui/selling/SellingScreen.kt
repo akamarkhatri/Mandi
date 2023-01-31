@@ -322,7 +322,7 @@ fun RenderScreenContent(
                     modifier = Modifier
                         .weight(1f)
                         .padding(vertical = dimensionResource(id = R.dimen.margin_2x)))
-                Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = null)
+                Icon(imageVector = Icons.Filled.KeyboardArrowDown, tint = GreenDark, contentDescription = null)
             }
         }
 
@@ -337,7 +337,7 @@ fun RenderScreenContent(
                     modifier = Modifier
                         .weight(1f)
                         .padding(vertical = dimensionResource(id = R.dimen.margin_2x)))
-                Icon(imageVector = Icons.Filled.KeyboardArrowDown, contentDescription = null)
+                Icon(imageVector = Icons.Filled.KeyboardArrowDown, tint = GreenDark, contentDescription = null)
             }
         }
 

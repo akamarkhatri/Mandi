@@ -11,14 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColorScheme(
-    primary = Purple200,
-    primaryContainer = Purple700,
-    secondary = Teal200
+    primary = GreenDark,
+    primaryContainer = GreenDark,
+    secondary = GreenLight
 )
 
 private val LightColorPalette = lightColorScheme(
     primary = GreenDark,
-    primaryContainer = Color.White,
+    primaryContainer = GreenDark,
     secondary = Teal200
 
     /* Other default colors to override
