@@ -16,7 +16,7 @@ import com.mandi.ui.theme.SemiTransparent
 @Composable
 fun BottomSheet(
     outSideOnClick: () -> Unit,
-    containerShape: Shape = RoundedCornerShape(dimensionResource(id = R.dimen.margin_2x)),
+    containerShape: Shape = RoundedCornerShape(topStart = dimensionResource(id = R.dimen.margin_2x), topEnd = dimensionResource(id = R.dimen.margin_2x)),
     containerBg: Color = Color.White,
     bottomContent: @Composable (ColumnScope.() -> Unit),
 ) {

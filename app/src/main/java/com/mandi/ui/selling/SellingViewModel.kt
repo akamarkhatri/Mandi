@@ -209,7 +209,7 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
                     if (state.selectedCommodityInfo?.commodityDetail?.commodityMeasurementType == CommodityMeasurementType.Killogram) {
                         valueWithoutIndex *= 1000
                     }
-                    valueWithoutIndex + loayalityIndex * valueWithoutIndex
+                    valueWithoutIndex + (loayalityIndex * valueWithoutIndex) / 100
                 }
                 state.update { it.copy(isLoading = false, grossValue = grossValue) }
 
