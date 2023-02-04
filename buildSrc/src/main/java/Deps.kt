@@ -160,7 +160,7 @@ class KinjectDeps internal constructor() {
 }
 
 class KotlinXSerializationDeps internal constructor() {
-    val common = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}"
+    val common = "org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.kotlinxSerialization}"
     val jvm = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.kotlinxSerialization}"
 }
 

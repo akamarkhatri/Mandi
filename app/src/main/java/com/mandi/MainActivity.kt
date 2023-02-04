@@ -16,9 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.mandi.ui.navigation.MandiAppNavGraph
 import com.mandi.ui.navigation.NavigationActions
+import com.mandi.ui.sellingcomplete.SellingCompleteViewModel
 import com.mandi.ui.theme.MandiTheme
 import dagger.hilt.android.AndroidEntryPoint
 

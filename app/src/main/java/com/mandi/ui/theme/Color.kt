@@ -35,9 +35,9 @@ fun getCardColors(containerColor: Color = GreenLight) = CardDefaults.cardColors(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun getTextFieldColors() = TextFieldDefaults.textFieldColors(
-    textColor = CharcoalDark,
-    disabledTextColor = CharcoalLight,
+fun getTextFieldColors(textFieldColorInfo: TextFieldColorInfo) = TextFieldDefaults.textFieldColors(
+    textColor = textFieldColorInfo.textColor,
+    disabledTextColor = textFieldColorInfo.disabledTextColor,
     containerColor = Color.White,
     cursorColor = GreenDark,
     errorCursorColor = Grenadier,
@@ -49,3 +49,5 @@ fun getTextFieldColors() = TextFieldDefaults.textFieldColors(
     disabledIndicatorColor = Color.Transparent,
     errorIndicatorColor = Grenadier
 )
+
+data class TextFieldColorInfo(val textColor: Color = CharcoalDark, val disabledTextColor: Color = CharcoalLight)

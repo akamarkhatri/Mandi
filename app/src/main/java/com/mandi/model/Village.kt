@@ -1,5 +1,5 @@
 package com.mandi.model
-
+@kotlinx.serialization.Serializable
 data class VillageInfo(
     val id: String,
     val postalCode: String,
@@ -7,4 +7,5 @@ data class VillageInfo(
     val sellingCommoditiesList: List<SellingCommodityInfo>,
 )
 
+@kotlinx.serialization.Serializable
 data class SellingCommodityInfo(val commodityDetail: CommodityDetail, val pricePerMeasurementType: Float)

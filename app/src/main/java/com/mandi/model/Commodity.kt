@@ -18,6 +18,7 @@ enum class CommodityMeasurementType {
     }
 }
 
+@kotlinx.serialization.Serializable
 data class CommodityDetail(
     val id: String,
     val name: String,

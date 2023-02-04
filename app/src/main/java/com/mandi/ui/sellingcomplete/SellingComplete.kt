@@ -14,6 +14,7 @@ import com.mandi.ui.base.compose.PrimaryButton
 import com.mandi.ui.base.compose.Text
 import com.mandi.ui.navigation.NavigationActions
 import com.mandi.ui.navigation.SellerInventoryInfo
+import com.mandi.ui.navigation.SellingScreenInfo
 import com.mandi.ui.theme.CharcoalDark
 import com.mandi.ui.theme.typography
 
@@ -64,6 +65,6 @@ fun SellingComplete(
                 Spacer(modifier = Modifier.weight(2f))
             }
         }
-        PrimaryButton(text = stringResource(id = R.string.sell_more), onClick = navigationActions.navToSellingScreen)
+        PrimaryButton(text = stringResource(id = R.string.sell_more), onClick = {navigationActions.navToSellingScreen(SellingScreenInfo.General)})
     }
 }

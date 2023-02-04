@@ -4,6 +4,7 @@ plugins {
     kotlin("kapt")
     id("dagger.hilt.android.plugin")
     id("androidx.navigation.safeargs.kotlin")
+    id("kotlinx-serialization")
 }
 
 android {
@@ -77,6 +78,7 @@ dependencies {
     implementation(Deps.coil.coilSvg)
     implementation(Deps.coil.coilCompose)
     implementation(Deps.kotlinx.coroutines.android)
+    implementation(Deps.kotlinx.serialization.common)
     implementation(Deps.kotlinx.serialization.jvm)
     implementation(Deps.ktor.plugin.json.jvm)
 

@@ -72,10 +72,12 @@ fun TextFieldNormal(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    textStyle: TextStyle = typography.bodyMedium,
+    textFieldColorInfo: TextFieldColorInfo = TextFieldColorInfo(),
     testTag: String = "TextFieldNormal_$labelText"
 ) {
     Column(modifier = modifier) {
-        val colors = getTextFieldColors()
+        val colors = getTextFieldColors(textFieldColorInfo)
         val isError = errorText.isNotEmpty()
 
         val textFieldModifier = Modifier
@@ -94,7 +96,7 @@ fun TextFieldNormal(
             },
             modifier = focusRequester?.let { textFieldModifier.focusRequester(focusRequester) } ?: textFieldModifier,
             enabled = enabled,
-            textStyle = typography.bodyMedium,
+            textStyle = textStyle,
             cursorBrush = SolidColor(if (isError) Grenadier else GreenDark),
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
@@ -103,6 +105,7 @@ fun TextFieldNormal(
             singleLine = singleLine,
             maxLines = maxLines,
             decorationBox = @Composable { innerTextField ->
+
                 TextFieldDefaults.TextFieldDecorationBox(
                     value = textFieldValue.text,
                     innerTextField = innerTextField,
