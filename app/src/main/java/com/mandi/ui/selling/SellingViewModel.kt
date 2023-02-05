@@ -8,10 +8,13 @@ import com.mandi.data.AppContainer
 import com.mandi.model.*
 import com.mandi.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,6 +22,7 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
     BaseViewModel(appContainer) {
 
     private val state = MutableStateFlow(SellingScreenState())
+    private var calculateGrossAmtJob: Job? = null
 
     val uiState = state.stateIn(
         viewModelScope,
@@ -28,6 +32,7 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
 
     fun setSellerInfo(sellerInfo: Seller?) {
         state.update { it.copy(sellerInfo = sellerInfo) }
+        chkAndCalculateGrossValue()
     }
 
     fun setCommodityInfo(sellingCommodityInfo: SellingCommodityInfo?) {
@@ -38,6 +43,7 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
                 grossValue = null
             )
         }
+        chkAndCalculateGrossValue()
     }
 
     fun setVillageInfo(villageInfo: VillageInfo?) {
@@ -45,7 +51,8 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
             it.copy(
                 selectedVillageInfo = villageInfo,
                 sellingScreenErrorType = null,
-                grossValue = null
+                grossValue = null,
+                selectedCommodityInfo = null
             )
         }
     }
@@ -76,26 +83,33 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
                         grossValue = null
                     )
                 }
+                chkAndCalculateGrossValue()
             }
-            SellingScreenEvent.CalculateGrossValue -> {
-                if (!canCalculateGrossValue()) {
-                    return
-                }
-                state.update { it.copy(isLoading = true) }
-                val grossValue = uiState.value.let { state ->
-                    val quantity = state.sellingCommodityWt.text.toFloat()
-                    val pricePerWt = state.selectedCommodityInfo?.pricePerMeasurementType ?: 0f
-                    val loayalityIndex =
-                        state.sellerInfo?.sellerRegistrationInfo?.getLoyalityIndexValue() ?: 0f
-                    var valueWithoutIndex = quantity * pricePerWt
-                    if (state.selectedCommodityInfo?.commodityDetail?.commodityMeasurementType == CommodityMeasurementType.Killogram) {
-                        valueWithoutIndex *= 1000
-                    }
-                    valueWithoutIndex + (loayalityIndex * valueWithoutIndex) / 100
-                }
-                state.update { it.copy(isLoading = false, grossValue = grossValue) }
+        }
+    }
 
+    private fun chkAndCalculateGrossValue() {
+        calculateGrossAmtJob?.cancel()
+        state.update { it.copy(grossValue = null, isLoading = false) }
+        val commodityWt = uiState.value.sellingCommodityWt.text.toFloatOrNull()
+        commodityWt ?: return
+        if (canCalculateGrossValue().not()) {
+            return
+        }
+        calculateGrossAmtJob = viewModelScope.launch {
+            state.update { it.copy(isLoading = true) }
+            delay(500)
+            val grossValue = uiState.value.let { state ->
+                val pricePerWt = state.selectedCommodityInfo?.pricePerMeasurementType ?: 0f
+                val loyalityIndex =
+                    state.sellerInfo?.sellerRegistrationInfo?.getLoyalityIndexValue() ?: 0f
+                var valueWithoutIndex = commodityWt * pricePerWt
+                if (state.selectedCommodityInfo?.commodityDetail?.commodityMeasurementType == CommodityMeasurementType.Killogram) {
+                    valueWithoutIndex *= 1000
+                }
+                valueWithoutIndex + (loyalityIndex * valueWithoutIndex) / 100
             }
+            state.update { it.copy(isLoading = false, grossValue = grossValue) }
         }
     }
 
@@ -107,11 +121,7 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
 }
 
 sealed class SellingScreenEvent {
-
-    //    class VillageSelected(val villageInfo: VillageInfo): SellingScreenEvent()
     class OnGrossWtUpdate(val textFieldValue: TextFieldValue) : SellingScreenEvent()
-
-    object CalculateGrossValue : SellingScreenEvent()
 }
 
 data class SellingScreenState(

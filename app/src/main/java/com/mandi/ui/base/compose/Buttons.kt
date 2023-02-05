@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import com.mandi.R
+import com.mandi.ui.theme.Neutral50
 import com.mandi.ui.theme.getPrimaryButtonColors
 import com.mandi.ui.theme.typography
 
@@ -53,7 +54,7 @@ fun PrimaryButton(
             textAlign = TextAlign.Center,
             allCaps = allCaps,
             isBold = true,
-            color = Color.White
+            color = if (enabled) Color.White else Neutral50
         )
     }
 }

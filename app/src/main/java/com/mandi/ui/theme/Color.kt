@@ -24,8 +24,8 @@ val SemiTransparent = Color(0x50000000)
 fun getPrimaryButtonColors(isDestructive: Boolean = false) = ButtonDefaults.buttonColors(
     containerColor = if (isDestructive) Grenadier else GreenDark,
     contentColor = Color.White,
-    disabledContentColor = Color.White,
-    disabledContainerColor = Neutral50
+    disabledContentColor = Neutral50,
+    disabledContainerColor = GreenLight
 )
 
 @Composable

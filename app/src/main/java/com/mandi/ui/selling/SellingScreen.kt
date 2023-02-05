@@ -13,6 +13,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.internal.enableLiveLiterals
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,8 +43,10 @@ fun SellingScreen(sellingViewModel: SellingViewModel, navigationActions: Navigat
     Column(modifier = Modifier
         .fillMaxWidth()
         .background(Color.White)
-        .padding(horizontal = dimensionResource(id = R.dimen.margin_3x),
-            vertical = dimensionResource(id = R.dimen.margin_2x))
+        .padding(
+            horizontal = dimensionResource(id = R.dimen.margin_3x),
+            vertical = dimensionResource(id = R.dimen.margin_2x)
+        )
     ) {
         val state by sellingViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -69,44 +73,53 @@ fun RenderBottomContent(
     } ?: "----"
     Column(modifier = Modifier
         .fillMaxWidth()
-        .padding(top = dimensionResource(id = R.dimen.margin_3x),
-            bottom = dimensionResource(id = R.dimen.margin_2x))) {
+        .padding(
+            top = dimensionResource(id = R.dimen.margin_3x),
+            bottom = dimensionResource(id = R.dimen.margin_2x)
+        )) {
         Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
             Text(text = stringResource(id = R.string.gross_price),
                 textStyle = typography.bodyLarge,
                 isBold = true,
                 modifier = Modifier.weight(1f))
-            Text(text = grossValueText,
-                textStyle = typography.bodyLarge,
-                isBold = true)
+
+            if (state.isLoading) {
+                CircularProgressIndicator(modifier = Modifier.size(dimensionResource(id = R.dimen.margin_2x)))
+            } else {
+                Text(text = grossValueText, textStyle = typography.bodyLarge, isBold = true)
+            }
         }
-        state.grossValue?.let {
-            val loyalityIndex = state.sellerInfo?.sellerRegistrationInfo?.getLoyalityIndexValue() ?: 0f
-            Text(text = stringResource(id = R.string.applied_loyality_index, loyalityIndex),
-                textStyle = typography.bodySmall,
-                color = GreenDark)
-        }
+
+
+        val loyalityIndexValue = state.sellerInfo?.sellerRegistrationInfo?.getLoyalityIndexValue()?.let { index->
+            state.grossValue?.let { stringResource(id = R.string.applied_loyality_index, index) }
+        } ?: "--"
+        Text(text = loyalityIndexValue,
+            textStyle = typography.bodySmall,
+            color = GreenDark)
+
         Spacer(modifier = Modifier.padding(top = dimensionResource(id = R.dimen.margin)))
         val context = LocalContext.current
         PrimaryButton(
-            text = if (state.grossValue == null) stringResource(id = R.string.calculate_gross_value) else stringResource(id = R.string.sell_my_produce),
+            text = stringResource(id = R.string.sell_my_produce),
             onClick = {
-                if (state.grossValue == null) {
-                        event(SellingScreenEvent.CalculateGrossValue)
-                } else {
-                    navigationActions.navToSellingComplete(SellerInventoryInfo(state.sellerInfo?.name.orEmpty(),
-                         context.getString(
-                             R.string.please_ensure_you_received_x_y_for_z_measure_of_your_produce,
-                             grossValueText,
-                             numberFormat.currency?.getSymbol(Locale.US).orEmpty(),
-                             state.sellingCommodityWt.text.toFloat(),
-                             context.getString(state.selectedCommodityInfo?.commodityDetail?.commodityMeasurementType?.getMesurementTypeNameResId()
-                                 ?: R.string.tonnes)
-                         )
-                    ))
-                }
-
+                navigationActions.navToSellingComplete(
+                    SellerInventoryInfo(
+                        state.sellerInfo?.name.orEmpty(),
+                        context.getString(
+                            R.string.please_ensure_you_received_x_y_for_z_measure_of_your_produce,
+                            grossValueText,
+                            numberFormat.currency?.getSymbol(Locale.US).orEmpty(),
+                            state.sellingCommodityWt.text.toFloat(),
+                            context.getString(
+                                state.selectedCommodityInfo?.commodityDetail?.commodityMeasurementType?.getMesurementTypeNameResId()
+                                    ?: R.string.tonnes
+                            )
+                        )
+                    )
+                )
             },
+            enabled = state.grossValue != null,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = dimensionResource(id = R.dimen.margin_3x))
@@ -133,9 +146,15 @@ fun RenderScreenContent(
                 },
                 enabled = false,
                 maxLines = 1,
-                modifier = Modifier.fillMaxWidth().clickable {
-                    navigationActions.navToSearchContentScreen(SearchContentInfo.Seller(SearchContentType.SELLER_BY_NAME))
-                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navigationActions.navToSearchContentScreen(
+                            SearchContentInfo.Seller(
+                                SearchContentType.SELLER_BY_NAME
+                            )
+                        )
+                    },
                 textFieldColorInfo = TextFieldColorInfo(disabledTextColor = CharcoalDark)
             )
         }
@@ -148,9 +167,15 @@ fun RenderScreenContent(
                 },
                 maxLines = 1,
                 enabled = false,
-                modifier = Modifier.fillMaxWidth().clickable {
-                   navigationActions.navToSearchContentScreen(SearchContentInfo.Seller(SearchContentType.SELLER_BY_LC_ID))
-                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navigationActions.navToSearchContentScreen(
+                            SearchContentInfo.Seller(
+                                SearchContentType.SELLER_BY_LC_ID
+                            )
+                        )
+                    },
                 textFieldColorInfo = TextFieldColorInfo(disabledTextColor = CharcoalDark)
             )
         }
@@ -160,7 +185,11 @@ fun RenderScreenContent(
                 .fillMaxWidth()
                 .clickable {
 //                    event(SellingScreenEvent.UpdateVillageBottomSheetStatus(true))
-                    navigationActions.navToSearchContentScreen(SearchContentInfo.Village(SearchContentType.VILLAGE))
+                    navigationActions.navToSearchContentScreen(
+                        SearchContentInfo.Village(
+                            SearchContentType.VILLAGE
+                        )
+                    )
                 }) {
                 Text(text = state.selectedVillageInfo?.name.orEmpty(),
                     textStyle = typography.bodyLarge,
@@ -176,7 +205,12 @@ fun RenderScreenContent(
                 .fillMaxWidth()
                 .clickable(enabled = state.selectedVillageInfo != null) {
 //                    event(SellingScreenEvent.UpdateCommodityBottomSheetStatus(true))
-                    navigationActions.navToSearchContentScreen(SearchContentInfo.Commodity(SearchContentType.COMMODITY, state.selectedVillageInfo?.id.orEmpty()))
+                    navigationActions.navToSearchContentScreen(
+                        SearchContentInfo.Commodity(
+                            SearchContentType.COMMODITY,
+                            state.selectedVillageInfo?.id.orEmpty()
+                        )
+                    )
                 }) {
                 Text(text = state.selectedCommodityInfo?.commodityDetail?.name.orEmpty(),
                     textStyle = typography.bodyLarge,
@@ -197,7 +231,8 @@ fun RenderScreenContent(
                         event(SellingScreenEvent.OnGrossWtUpdate(it))
                     },
                     keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Decimal
+                        keyboardType = KeyboardType.Decimal,
+                        imeAction = ImeAction.Done
                     ),
                     modifier = Modifier
                         .fillMaxWidth()
@@ -225,9 +260,12 @@ private fun RenderScreenContentItem(
     Card(modifier = modifier) {
         Column(modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = dimensionResource(id = R.dimen.margin_2x),
+            .padding(
+                horizontal = dimensionResource(id = R.dimen.margin_2x),
                 vertical = dimensionResource(
-                    id = R.dimen.margin_3x))) {
+                    id = R.dimen.margin_3x
+                )
+            )) {
             Text(text = title,
                 textStyle = typography.bodyLarge,
                 color = Neutral50)
@@ -238,9 +276,11 @@ private fun RenderScreenContentItem(
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.margin))
                 )
                 .fillMaxWidth()
-                .padding(start = dimensionResource(id = R.dimen.margin),
+                .padding(
+                    start = dimensionResource(id = R.dimen.margin),
                     end = dimensionResource(id = R.dimen.margin),
-                    bottom = dimensionResource(id = R.dimen.margin))
+                    bottom = dimensionResource(id = R.dimen.margin)
+                )
             ) {
                 content(this)
             }
