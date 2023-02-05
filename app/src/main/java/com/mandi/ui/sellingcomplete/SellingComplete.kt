@@ -65,6 +65,6 @@ fun SellingComplete(
                 Spacer(modifier = Modifier.weight(2f))
             }
         }
-        PrimaryButton(text = stringResource(id = R.string.sell_more), onClick = {navigationActions.navToSellingScreen(SellingScreenInfo.General)})
+        PrimaryButton(text = stringResource(id = R.string.sell_more), onClick = {navigationActions.navToSellingScreen(null)})
     }
 }

@@ -17,6 +17,7 @@ import com.mandi.ui.selling.SellingScreen
 import com.mandi.ui.selling.SellingViewModel
 import com.mandi.ui.sellingcomplete.SellingComplete
 import com.mandi.ui.sellingcomplete.SellingCompleteViewModel
+import com.mandi.util.checkAndConvertToNull
 import com.mandi.util.getFromJson
 import com.mandi.util.json
 
@@ -37,7 +38,7 @@ fun MandiAppNavGraph(
                     Seller::class.java
                 )*/
 
-                val sellingScreenInfo = it.arguments?.getString(AppDestination.SellingScreen.KEY_SELLER_SCREEN_INFO)?.let {
+                val sellingScreenInfo = it.arguments?.getString(AppDestination.SellingScreen.KEY_SELLER_SCREEN_INFO)?.checkAndConvertToNull()?.let {
                     Log.d("NAvGraph", it)
                     json.decodeFromString(SellingScreenInfo.serializer(), it)
                 }
@@ -45,7 +46,7 @@ fun MandiAppNavGraph(
                     is SellingScreenInfo.Commodity -> setCommodityInfo(sellingScreenInfo.data)
                     is SellingScreenInfo.Seller -> setSellerInfo(sellingScreenInfo.data)
                     is SellingScreenInfo.Village -> setVillageInfo(sellingScreenInfo.data)
-                    else -> { }
+                    null -> { }
                 }
             }
             SellingScreen(sellingViewModel = sellingViewModel, navigationActions)

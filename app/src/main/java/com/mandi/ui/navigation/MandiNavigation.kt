@@ -12,14 +12,13 @@ import kotlinx.serialization.json.Json
 class NavigationActions(navController: NavController) {
     val navToSellingScreen: (sellingScreenInfo: SellingScreenInfo?) -> Unit = {
 
-        if (it == SellingScreenInfo.General) {
-            navController.clearBackStack(AppDestination.SellingComplete.routeWithArgs)
+        if (it == null)
+        {
+            navController.popBackStack()
         }
-
-        navController.navigate("${AppDestination.SellingScreen.route}/${json.encodeToString(it)}") {
+        navController.navigate("${AppDestination.SellingScreen.route}?${AppDestination.SellingScreen.KEY_SELLER_SCREEN_INFO}=${json.encodeToString(it)}")
+        {
             launchSingleTop = true
-//            navController.cl
-
             popUpTo(AppDestination.SellingScreen.routeWithArgs){
                 this.saveState = it != null
                 this.inclusive = it == null
@@ -41,11 +40,7 @@ class NavigationActions(navController: NavController) {
     val navToSearchContentScreen: (searchContentInfo: SearchContentInfo?) -> Unit = {
         navController.navigate("${AppDestination.SearchContent.route}/${json.encodeToString(it)}") {
             launchSingleTop = true
-            popUpTo(AppDestination.SellingScreen.routeWithArgs){
-                this.saveState = true
-            }
         }
-//        navController.popBackStack()
     }
     val popUp: (seller:Seller?) -> Unit = {
         navController.previousBackStackEntry?.savedStateHandle?.set(AppDestination.SellingScreen.KEY_SELLER_SCREEN_INFO, json.encodeToString(it))
@@ -65,6 +60,6 @@ sealed class SellingScreenInfo{
     @kotlinx.serialization.Serializable
     data class Commodity(val data: SellingCommodityInfo): SellingScreenInfo()
 
-    @kotlinx.serialization.Serializable
-    object General: SellingScreenInfo()
+//    @kotlinx.serialization.Serializable
+//    object General: SellingScreenInfo()
 }

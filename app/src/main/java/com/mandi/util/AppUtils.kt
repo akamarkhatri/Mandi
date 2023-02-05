@@ -49,3 +49,4 @@ val json by lazy {
 
     }
 }
+fun String?.checkAndConvertToNull() = if (this.equals("null", true)) null else this

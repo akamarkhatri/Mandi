@@ -7,13 +7,13 @@ import com.mandi.ui.search.SearchContentType
 sealed class AppDestination(val route: String) {
     object SellingScreen: AppDestination("selling_screen") {
         const val KEY_SELLER_SCREEN_INFO = "sellerScreenInfo"
-        val routeWithArgs = "$route/{$KEY_SELLER_SCREEN_INFO}"
+        val routeWithArgs = "$route?$KEY_SELLER_SCREEN_INFO={$KEY_SELLER_SCREEN_INFO}"
 //        val routeWithArgs = "$route?$KEY_SELLER_SCREEN_INFO={$KEY_SELLER_SCREEN_INFO}"
         val arguments = listOf(
             navArgument(KEY_SELLER_SCREEN_INFO) {
                 type = NavType.StringType
                 nullable = true
-                defaultValue = null
+//                defaultValue = null
             }
         )
     }
