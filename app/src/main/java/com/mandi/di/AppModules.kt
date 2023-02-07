@@ -2,6 +2,9 @@ package com.mandi.di
 
 import android.app.Application
 import com.mandi.data.AppContainer
+import com.mandi.data.AppContainerImpl
+import com.mandi.data.DefaultDispatcher
+import com.mandi.data.DispatcherProvider
 import com.mandi.data.commodity.CommodityRepository
 import com.mandi.data.commodity.impl.FakeCommodityRepository
 import com.mandi.data.seller.SellerRepository
@@ -22,24 +25,29 @@ class AppModules {
     fun provideAppContainer(
         sellerRepository: SellerRepository,
         villageRepository: VillageRepository,
-        commodityRepository: CommodityRepository,
+        commodityRepository: CommodityRepository
     ):AppContainer {
-        return AppContainer(sellerRepository, villageRepository, commodityRepository)
+        return AppContainerImpl(sellerRepository, villageRepository, commodityRepository)
     }
 
     @Provides
-    fun provideSellerRepository(application: Application): SellerRepository {
-        return FakeSellerRepository()
+    fun provideSellerRepository(application: Application, dispatcherProvider: DispatcherProvider): SellerRepository {
+        return FakeSellerRepository(dispatcherProvider)
     }
 
     @Provides
-    fun provideVillageRepository(application: Application): VillageRepository {
-        return FakeVillageRepository()
+    fun provideVillageRepository(application: Application, dispatcherProvider: DispatcherProvider): VillageRepository {
+        return FakeVillageRepository(dispatcherProvider)
     }
 
     @Provides
-    fun provideCommodityRepository(application: Application): CommodityRepository {
-        return FakeCommodityRepository()
+    fun provideCommodityRepository(application: Application, dispatcherProvider: DispatcherProvider): CommodityRepository {
+        return FakeCommodityRepository(dispatcherProvider)
+    }
+
+    @Provides
+    fun provideDispatcherProvider(): DispatcherProvider {
+        return DefaultDispatcher()
     }
 
 }

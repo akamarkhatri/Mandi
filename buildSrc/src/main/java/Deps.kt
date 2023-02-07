@@ -104,7 +104,8 @@ class AndroidXTestDeps internal constructor() {
         "androidx.test:rules:1.5.0",
         "androidx.test.ext:junit:1.1.4",
         "androidx.test.ext:truth:1.5.0",
-        "com.google.truth:truth:1.0.1"
+        "com.google.truth:truth:1.1.3",
+        "androidx.arch.core:core-testing:2.1.0"
     )
     val espresso = listOf(
         "androidx.test.espresso:espresso-core:3.5.0",
@@ -118,6 +119,8 @@ class AndroidXTestDeps internal constructor() {
     val espressoIdlingResources = "androidx.test.espresso:espresso-idling-resource:3.4.0"
     val orchestrator = "androidx.test:orchestrator:1.4.1"
     val composeTest = "androidx.compose.ui:ui-test-junit4" // This uses the composeBom versioning
+    val mockito = "org.mockito:mockito-core:3.4.6"
+    val turbine = "app.cash.turbine:turbine:0.11.0"
 }
 
 class KotlinDeps internal constructor() {

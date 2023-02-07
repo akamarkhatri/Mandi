@@ -1,10 +1,11 @@
 package com.mandi.data.village
 
+import com.mandi.data.BaseRepository
 import com.mandi.data.Result
 import com.mandi.model.SellingCommodityInfo
 import com.mandi.model.VillageInfo
 
-interface VillageRepository {
+interface VillageRepository: BaseRepository {
     suspend fun getAllVillage(): Result<List<VillageInfo>>
 
     suspend fun getVillage(id: String): Result<VillageInfo>

@@ -94,7 +94,6 @@ dependencies {
     }
 
     implementation(Deps.android.hiltAndroid)
-    testImplementation(Deps.junit)
     kapt(Deps.android.hiltCompiler)
     for (lib in Deps.androidx.hiltAndroidXNavigationCompose) {
         implementation(lib)
@@ -112,5 +111,12 @@ dependencies {
     androidTestImplementation(Deps.ktor.plugin.serialization.content)
     androidTestImplementation(Deps.ktor.plugin.serialization.jvm)
     androidTestUtil(Deps.androidx.test.orchestrator)
+
+    testImplementation(Deps.junit)
+    testImplementation(Deps.kotlinx.coroutines.test)
+    for (lib in Deps.androidx.test.all) {
+        testImplementation(lib)
+    }
+    testImplementation(Deps.androidx.test.turbine)
 }
 

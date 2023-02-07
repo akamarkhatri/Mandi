@@ -8,13 +8,14 @@ import com.mandi.data.village.VillageRepository
 import com.mandi.data.village.impl.FakeVillageRepository
 import javax.inject.Inject
 
-/*interface AppContainer {
-    val sellerRepository: SellerRepository
-    val villageRepository: VillageRepository
-    val commodityRepository: CommodityRepository
-}*/
+interface AppContainer {
+     val sellerRepository: SellerRepository
+     val villageRepository: VillageRepository
+     val commodityRepository: CommodityRepository
+}
 
-class AppContainer @Inject internal constructor(
-     val sellerRepository: SellerRepository,
-     val villageRepository: VillageRepository,
-     val commodityRepository: CommodityRepository)
+class AppContainerImpl @Inject internal constructor(
+     override val sellerRepository: SellerRepository,
+     override val villageRepository: VillageRepository,
+     override val commodityRepository: CommodityRepository
+): AppContainer

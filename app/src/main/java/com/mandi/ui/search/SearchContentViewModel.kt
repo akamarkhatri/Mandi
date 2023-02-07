@@ -48,7 +48,7 @@ class SearchContentViewModel @Inject internal constructor(appContainer: AppConta
         if (query.text.trim().isEmpty()) {
             updateState(_searchState.value.copy(searchResult = listOf()))
         } else {
-            viewModelScope.launch {
+            searchJob = viewModelScope.launch(dispatcherProvider.main) {
                 searchContentInfo?.getType()?.let {
                     updateState(_searchState.value.copy(isLoading = true))
                     delay(debouncePeriod)
