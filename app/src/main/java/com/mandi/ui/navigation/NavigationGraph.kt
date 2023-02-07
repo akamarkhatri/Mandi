@@ -18,7 +18,6 @@ import com.mandi.ui.selling.SellingViewModel
 import com.mandi.ui.sellingcomplete.SellingComplete
 import com.mandi.ui.sellingcomplete.SellingCompleteViewModel
 import com.mandi.util.checkAndConvertToNull
-import com.mandi.util.getFromJson
 import com.mandi.util.json
 
 @Composable
@@ -54,9 +53,7 @@ fun MandiAppNavGraph(
         composable(route = AppDestination.SellingComplete.routeWithArgs,
             arguments = AppDestination.SellingComplete.arguments) {
             val sellingCompleteViewModel: SellingCompleteViewModel = hiltViewModel()
-            val sellerInventoryInfo =
-//                Gson().fromJson(it.arguments?.getString(AppDestination.SellingComplete.KEY_INVENTORY_INFO), SellerInventoryInfo::class.java)
-            getFromJson(it.arguments?.getString(AppDestination.SellingComplete.KEY_INVENTORY_INFO), SellerInventoryInfo::class.java)
+            val sellerInventoryInfo = json.decodeFromString(SellerInventoryInfo.serializer(), it.arguments?.getString(AppDestination.SellingComplete.KEY_INVENTORY_INFO).orEmpty())
             SellingComplete(sellingCompleteViewModel = sellingCompleteViewModel, navigationActions, sellerInventoryInfo)
         }
         composable(AppDestination.SearchContent.routeWithArgs, arguments = AppDestination.SearchContent.arguments) {

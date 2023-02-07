@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -94,7 +95,8 @@ fun SearchContent(searchContentViewModel: SearchContentViewModel, navigationActi
                             maxLines = 1,
                             labelText = stringResource(id = R.string.input_search_hint, stringResource(id = it.hintResId)),
                             modifier = Modifier.fillMaxWidth(),
-                            focusRequester = focusRequester
+                            focusRequester = focusRequester,
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
                         )
                     }
                 }
