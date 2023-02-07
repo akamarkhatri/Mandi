@@ -96,7 +96,7 @@ class SellingViewModel @Inject internal constructor(appContainer: AppContainer) 
         if (canCalculateGrossValue().not()) {
             return
         }
-        calculateGrossAmtJob = viewModelScope.launch {
+        calculateGrossAmtJob = viewModelScope.launch(dispatcherProvider.main) {
             state.update { it.copy(isLoading = true) }
             delay(500)
             val grossValue = uiState.value.let { state ->

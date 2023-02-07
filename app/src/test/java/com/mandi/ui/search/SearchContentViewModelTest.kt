@@ -7,7 +7,6 @@ import kotlinx.coroutines.test.runTest
 import com.google.common.truth.Truth.assertThat
 import com.mandi.model.Seller
 import kotlinx.coroutines.*
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
@@ -29,7 +28,6 @@ class SearchContentViewModelTest: BaseTest() {
             delay(searchContentViewModel.debouncePeriod)
             searchContentViewModel.searchState.test {
                 val searchResult = awaitItem().searchResult.find { (it as? Seller)?.name.orEmpty().contains(query) } as? Seller
-                println("$searchResult")
                 assertThat(searchResult?.name).contains(query)
                 cancelAndConsumeRemainingEvents()
             }
