@@ -17,7 +17,7 @@ android {
         versionCode = 1
         versionName = "1.0"
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.mandi.base.UITestRunner"
     }
 
     buildTypes {
@@ -95,6 +95,7 @@ dependencies {
 
     implementation(Deps.android.hiltAndroid)
     kapt(Deps.android.hiltCompiler)
+    kaptTest(Deps.android.hiltCompiler)
     for (lib in Deps.androidx.hiltAndroidXNavigationCompose) {
         implementation(lib)
     }
@@ -111,6 +112,8 @@ dependencies {
     androidTestImplementation(Deps.ktor.plugin.serialization.content)
     androidTestImplementation(Deps.ktor.plugin.serialization.jvm)
     androidTestUtil(Deps.androidx.test.orchestrator)
+    kaptAndroidTest(Deps.android.hiltCompiler)
+    androidTestImplementation(Deps.android.hiltTesting)
 
     testImplementation(Deps.junit)
     testImplementation(Deps.kotlinx.coroutines.test)

@@ -57,7 +57,7 @@ class AndroidDeps internal constructor() {
     val material = "com.google.android.material:material:1.5.0"
     val hiltAndroid = "com.google.dagger:hilt-android:${Versions.hilt}"
     val hiltCompiler = "com.google.dagger:hilt-android-compiler:${Versions.hilt}"
-//    val playServices = PlayServicesDeps()
+    val hiltTesting = "com.google.dagger:hilt-android-testing:${Versions.hilt}"
 }
 
 class AndroidXDeps internal constructor() {

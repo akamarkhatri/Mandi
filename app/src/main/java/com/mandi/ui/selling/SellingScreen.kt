@@ -13,7 +13,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.internal.enableLiveLiterals
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -110,7 +109,7 @@ fun RenderBottomContent(
                             R.string.please_ensure_you_received_x_y_for_z_measure_of_your_produce,
                             grossValueText,
                             numberFormat.currency?.getSymbol(Locale.US).orEmpty(),
-                            state.sellingCommodityWt.text.toFloat(),
+                            numberFormat.format(state.sellingCommodityWt.text.toFloat()),
                             context.getString(
                                 state.selectedCommodityInfo?.commodityDetail?.commodityMeasurementType?.getMesurementTypeNameResId()
                                     ?: R.string.tonnes
@@ -138,45 +137,41 @@ fun RenderScreenContent(
 ) {
     val scrollState = rememberScrollState()
     Column(modifier = modifier.verticalScroll(scrollState)) {
-        RenderScreenContentItem(title = stringResource(id = R.string.seller_name),
-            modifier = Modifier.padding(top = dimensionResource(id = R.dimen.margin_2x))) {
-            TextFieldNormal(
-                textFieldValue = TextFieldValue(state.sellerInfo?.name.orEmpty()),
-                onValueChange = {
-                },
-                enabled = false,
-                maxLines = 1,
+        RenderScreenContentItem(
+            title = stringResource(id = R.string.seller_name),
+            modifier = Modifier
+                .padding(top = dimensionResource(id = R.dimen.margin_2x)),
+            onClick = {
+                navigationActions.navToSearchContentScreen(
+                    SearchContentInfo.Seller(
+                        SearchContentType.SELLER_BY_NAME
+                    )
+                )
+            }) {
+            Text(
+                text = state.sellerInfo?.name.orEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        navigationActions.navToSearchContentScreen(
-                            SearchContentInfo.Seller(
-                                SearchContentType.SELLER_BY_NAME
-                            )
-                        )
-                    },
-                textFieldColorInfo = TextFieldColorInfo(disabledTextColor = CharcoalDark)
+                    .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_2x)),
+                textStyle = typography.bodyLarge,
+                color = CharcoalDark
             )
         }
 
-        RenderScreenContentItem(title = stringResource(id = R.string.loyality_card_identifier)) {
-            TextFieldNormal(
-                textFieldValue = TextFieldValue(state.sellerInfo?.sellerRegistrationInfo?.getCardId().orEmpty()),
-                onValueChange = {
-
-                },
-                maxLines = 1,
-                enabled = false,
+        RenderScreenContentItem(title = stringResource(id = R.string.loyality_card_identifier), onClick = {
+            navigationActions.navToSearchContentScreen(
+                SearchContentInfo.Seller(
+                    SearchContentType.SELLER_BY_LC_ID
+                )
+            )
+        }) {
+            Text(
+                text = state.sellerInfo?.sellerRegistrationInfo?.getCardId().orEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable {
-                        navigationActions.navToSearchContentScreen(
-                            SearchContentInfo.Seller(
-                                SearchContentType.SELLER_BY_LC_ID
-                            )
-                        )
-                    },
-                textFieldColorInfo = TextFieldColorInfo(disabledTextColor = CharcoalDark)
+                    .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_2x)),
+                textStyle = typography.bodyLarge,
+                color = CharcoalDark
             )
         }
 
@@ -195,7 +190,8 @@ fun RenderScreenContent(
                     textStyle = typography.bodyLarge,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(vertical = dimensionResource(id = R.dimen.margin_2x)))
+                        .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_2x))
+                )
                 Icon(imageVector = Icons.Filled.KeyboardArrowDown, tint = GreenDark, contentDescription = null)
             }
         }
@@ -216,16 +212,19 @@ fun RenderScreenContent(
                     textStyle = typography.bodyLarge,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(vertical = dimensionResource(id = R.dimen.margin_2x)))
+                        .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_2x))
+                )
                 Icon(imageVector = Icons.Filled.KeyboardArrowDown, tint = GreenDark, contentDescription = null)
             }
         }
 
         RenderScreenContentItem(title = stringResource(id = R.string.gross_weight)) {
             Row(verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()) {
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_half))
+            ) {
                 TextFieldNormal(textFieldValue = state.sellingCommodityWt,
-                    maxCharacters = 5,
                     maxLines = 1,
                     onValueChange = {
                         event(SellingScreenEvent.OnGrossWtUpdate(it))
@@ -255,6 +254,7 @@ private fun RenderScreenContentItem(
     title: String,
     modifier: Modifier = Modifier.padding(top = dimensionResource(
         id = R.dimen.margin_4x)),
+    onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(modifier = modifier) {
@@ -269,18 +269,17 @@ private fun RenderScreenContentItem(
             Text(text = title,
                 textStyle = typography.bodyLarge,
                 color = Neutral50)
-            Column(verticalArrangement = Arrangement.Center, modifier = Modifier
+            var innerCntentModifier = Modifier
                 .padding(top = dimensionResource(id = R.dimen.margin_2x))
                 .background(
                     color = Color.White,
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.margin))
                 )
                 .fillMaxWidth()
-                .padding(
-                    start = dimensionResource(id = R.dimen.margin),
-                    end = dimensionResource(id = R.dimen.margin),
-                    bottom = dimensionResource(id = R.dimen.margin)
-                )
+            innerCntentModifier = onClick?.let { innerCntentModifier.clickable { it.invoke() } } ?: innerCntentModifier
+            Column(
+                verticalArrangement = Arrangement.Center,
+                modifier = innerCntentModifier
             ) {
                 content(this)
             }
@@ -300,7 +299,8 @@ fun PreviewRenderScreenContent() {
                 Modifier.fillMaxWidth())
         }
 
-        RenderScreenContentItem(title = "Loyality Card Identifier",
+        RenderScreenContentItem(
+            title = "Loyality Card Identifier",
             modifier = Modifier.padding(top = dimensionResource(
                 id = R.dimen.margin_2x))) {
             TextFieldNormal(textFieldValue = TextFieldValue("S100"), onValueChange = { },

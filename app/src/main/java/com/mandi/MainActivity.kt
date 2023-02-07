@@ -3,6 +3,7 @@ package com.mandi
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 //import androidx.compose.material.MaterialTheme
 //import androidx.compose.material.Surface
@@ -29,31 +30,14 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MandiTheme {
-                val navController = rememberNavController()
-                // A surface container using the 'background' color from the theme
-                /*Surface(modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background) {
-                    Greeting("Android")
-                }*/
-                MandiAppNavGraph()
-            }
+            LaunchApp()
         }
     }
-}
 
-@Composable
-fun Greeting(name: String) {
-//    Text(text = "Hello $name!")
-    TextButton(onClick = { }) {
-        Text(text = "Hello $name click me")
-    }
 }
-
-@Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun LaunchApp() {
     MandiTheme {
-        Greeting("Android")
+        MandiAppNavGraph()
     }
 }

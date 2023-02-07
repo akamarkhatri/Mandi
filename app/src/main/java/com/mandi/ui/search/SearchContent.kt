@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -69,7 +70,7 @@ fun SearchContent(searchContentViewModel: SearchContentViewModel, navigationActi
                             modifier = Modifier.weight(1f)
                         )
                         if (state.isLoading) {
-                            IndeterminateCircularProgressBarWithDrawable()
+                            CircularProgressIndicator(modifier = Modifier.size(dimensionResource(id = R.dimen.margin_2x)))
                         }
                     }
 
