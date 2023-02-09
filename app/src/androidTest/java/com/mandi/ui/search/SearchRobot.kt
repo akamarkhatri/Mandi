@@ -27,4 +27,31 @@ class SearchRobot: BaseRobot() {
         }
         clickIndexInsideLazyColumn("SearchResult",index)
     }
+
+    fun verifyUi(searchContentType: SearchContentType) {
+        verifyComposeViewVisible(composeTestRule.activity.getString(R.string.back))
+        val title = composeTestRule.activity.getString(
+            R.string.search_content,
+            composeTestRule.activity.getString(searchContentType.titleResId)
+        )
+        verifyComposeTextVisible(title)
+        verifyComposeViewInVisibleOrGone("SearchResult")
+        verifyComposeViewInVisibleOrGone("Loader")
+        searchText("a", searchContentType)
+        verifyComposeViewVisible("Loader")
+        composeTestRule.waitUntil {
+            composeTestRule.onAllNodesWithTag("Loader")
+                .fetchSemanticsNodes().isEmpty()
+        }
+        verifyComposeViewVisible("SearchResult")
+    }
+
+    fun clickBackButton() {
+        val backLabel = composeTestRule.activity.getString(R.string.back)
+       /* composeTestRule.waitUntil {
+            composeTestRule.onAllNodesWithTag(backLabel)
+                .fetchSemanticsNodes().isNotEmpty()
+        }*/
+        clickComposeView(backLabel, true)
+    }
 }
