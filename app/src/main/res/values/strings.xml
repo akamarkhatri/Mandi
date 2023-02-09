@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Mandi</string>
     <string name="applied_loyality_index">Applied Loyality Index %1$.2f</string>
+    <string name="back">Back</string>
     <string name="calculate_gross_value">Calculate Gross Value</string>
     <string name="commodity">Commodity</string>
     <string name="dozens">Dozen</string>

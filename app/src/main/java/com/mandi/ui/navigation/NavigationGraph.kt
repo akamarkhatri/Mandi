@@ -18,7 +18,6 @@ import com.mandi.ui.selling.SellingViewModel
 import com.mandi.ui.sellingcomplete.SellingComplete
 import com.mandi.ui.sellingcomplete.SellingCompleteViewModel
 import com.mandi.util.checkAndConvertToNull
-import com.mandi.util.getFromJson
 import com.mandi.util.json
 
 @Composable
@@ -33,13 +32,7 @@ fun MandiAppNavGraph(
     NavHost(navController = navController, startDestination =  startDestination, modifier = modifier) {
         composable(route = AppDestination.SellingScreen.routeWithArgs, arguments = AppDestination.SellingScreen.arguments) {
             val sellingViewModel: SellingViewModel = hiltViewModel<SellingViewModel>().apply {
-                /*val seller = getFromJson(
-                    it.arguments?.getString(AppDestination.SellingScreen.KEY_SELLER_INFO),
-                    Seller::class.java
-                )*/
-
                 val sellingScreenInfo = it.arguments?.getString(AppDestination.SellingScreen.KEY_SELLER_SCREEN_INFO)?.checkAndConvertToNull()?.let {
-                    Log.d("NAvGraph", it)
                     json.decodeFromString(SellingScreenInfo.serializer(), it)
                 }
                 when (sellingScreenInfo) {
@@ -54,20 +47,16 @@ fun MandiAppNavGraph(
         composable(route = AppDestination.SellingComplete.routeWithArgs,
             arguments = AppDestination.SellingComplete.arguments) {
             val sellingCompleteViewModel: SellingCompleteViewModel = hiltViewModel()
-            val sellerInventoryInfo =
-//                Gson().fromJson(it.arguments?.getString(AppDestination.SellingComplete.KEY_INVENTORY_INFO), SellerInventoryInfo::class.java)
-            getFromJson(it.arguments?.getString(AppDestination.SellingComplete.KEY_INVENTORY_INFO), SellerInventoryInfo::class.java)
+            val sellerInventoryInfo = it.arguments?.getString(AppDestination.SellingComplete.KEY_INVENTORY_INFO)?.let {
+                json.decodeFromString(SellerInventoryInfo.serializer(), it)
+            }
             SellingComplete(sellingCompleteViewModel = sellingCompleteViewModel, navigationActions, sellerInventoryInfo)
         }
         composable(AppDestination.SearchContent.routeWithArgs, arguments = AppDestination.SearchContent.arguments) {
-            /*val searchContentType =
-                it.arguments?.getSerializable(AppDestination.SearchContent.KEY_SEARCH_CONTENT_TYPE) as? SearchContentType*/
-
             val searchContentViewModel: SearchContentViewModel = hiltViewModel<SearchContentViewModel>().apply {
                 it.arguments?.getString(AppDestination.SearchContent.KEY_SEARCH_CONTENT_TYPE)?.let {
                     this.searchContentInfo = json.decodeFromString(SearchContentInfo.serializer(), it)
                 }
-//                this.searchContentType = searchContentType
             }
             SearchContent(searchContentViewModel = searchContentViewModel, navigationActions = navigationActions)
         }

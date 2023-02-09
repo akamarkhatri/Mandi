@@ -18,6 +18,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -83,12 +84,13 @@ fun RenderBottomContent(
                 modifier = Modifier.weight(1f))
 
             if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.size(dimensionResource(id = R.dimen.margin_2x)))
+                CircularProgressIndicator(modifier = Modifier.size(dimensionResource(id = R.dimen.margin_2x)).testTag("Loader"))
             } else {
-                Text(text = grossValueText, textStyle = typography.bodyLarge, isBold = true)
+                state.grossValue?.let {
+                    Text(text = grossValueText, textStyle = typography.bodyLarge, isBold = true, modifier = Modifier.testTag("GrossValue"))
+                }
             }
         }
-
 
         val loyalityIndexValue = state.sellerInfo?.sellerRegistrationInfo?.getLoyalityIndexValue()?.let { index->
             state.grossValue?.let { stringResource(id = R.string.applied_loyality_index, index) }
@@ -152,7 +154,10 @@ fun RenderScreenContent(
                 text = state.sellerInfo?.name.orEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_2x)),
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.margin),
+                        vertical = dimensionResource(id = R.dimen.margin_2x)
+                    ),
                 textStyle = typography.bodyLarge,
                 color = CharcoalDark
             )
@@ -169,28 +174,36 @@ fun RenderScreenContent(
                 text = state.sellerInfo?.sellerRegistrationInfo?.getCardId().orEmpty(),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_2x)),
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.margin),
+                        vertical = dimensionResource(id = R.dimen.margin_2x)
+                    ),
                 textStyle = typography.bodyLarge,
                 color = CharcoalDark
             )
         }
 
-        RenderScreenContentItem(title = stringResource(id = R.string.village)) {
+        RenderScreenContentItem(
+            title = stringResource(id = R.string.village),
+            onClick = {
+                navigationActions.navToSearchContentScreen(
+                    SearchContentInfo.Village(
+                        SearchContentType.VILLAGE
+                    )
+                )
+            }
+        ) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                 .fillMaxWidth()
-                .clickable {
-//                    event(SellingScreenEvent.UpdateVillageBottomSheetStatus(true))
-                    navigationActions.navToSearchContentScreen(
-                        SearchContentInfo.Village(
-                            SearchContentType.VILLAGE
-                        )
-                    )
-                }) {
+                ) {
                 Text(text = state.selectedVillageInfo?.name.orEmpty(),
                     textStyle = typography.bodyLarge,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_2x))
+                        .padding(
+                            horizontal = dimensionResource(id = R.dimen.margin),
+                            vertical = dimensionResource(id = R.dimen.margin_2x)
+                        )
                 )
                 Icon(imageVector = Icons.Filled.KeyboardArrowDown, tint = GreenDark, contentDescription = null)
             }
@@ -199,6 +212,7 @@ fun RenderScreenContent(
         RenderScreenContentItem(title = stringResource(id = R.string.commodity)) {
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier
                 .fillMaxWidth()
+                .testTag(stringResource(id = R.string.commodity))
                 .clickable(enabled = state.selectedVillageInfo != null) {
 //                    event(SellingScreenEvent.UpdateCommodityBottomSheetStatus(true))
                     navigationActions.navToSearchContentScreen(
@@ -212,7 +226,10 @@ fun RenderScreenContent(
                     textStyle = typography.bodyLarge,
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_2x))
+                        .padding(
+                            horizontal = dimensionResource(id = R.dimen.margin),
+                            vertical = dimensionResource(id = R.dimen.margin_2x)
+                        )
                 )
                 Icon(imageVector = Icons.Filled.KeyboardArrowDown, tint = GreenDark, contentDescription = null)
             }
@@ -222,7 +239,10 @@ fun RenderScreenContent(
             Row(verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = dimensionResource(id = R.dimen.margin), vertical = dimensionResource(id = R.dimen.margin_half))
+                    .padding(
+                        horizontal = dimensionResource(id = R.dimen.margin),
+                        vertical = dimensionResource(id = R.dimen.margin_half)
+                    )
             ) {
                 TextFieldNormal(textFieldValue = state.sellingCommodityWt,
                     maxLines = 1,
@@ -236,7 +256,8 @@ fun RenderScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
-                    enabled = state.selectedCommodityInfo != null
+                    enabled = state.selectedCommodityInfo != null,
+                    testTag = "WeightTextField"
                 )
                 state.selectedCommodityInfo?.let {
                     Text(text = stringResource(id = it.commodityDetail.commodityMeasurementType.getMesurementTypeNameResId()),
@@ -276,7 +297,11 @@ private fun RenderScreenContentItem(
                     shape = RoundedCornerShape(dimensionResource(id = R.dimen.margin))
                 )
                 .fillMaxWidth()
-            innerCntentModifier = onClick?.let { innerCntentModifier.clickable { it.invoke() } } ?: innerCntentModifier
+            innerCntentModifier = onClick?.let {
+                innerCntentModifier
+                    .clickable { it.invoke() }
+                    .testTag(title)
+            } ?: innerCntentModifier
             Column(
                 verticalArrangement = Arrangement.Center,
                 modifier = innerCntentModifier

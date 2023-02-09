@@ -42,8 +42,7 @@ class NavigationActions(navController: NavController) {
             launchSingleTop = true
         }
     }
-    val popUp: (seller:Seller?) -> Unit = {
-        navController.previousBackStackEntry?.savedStateHandle?.set(AppDestination.SellingScreen.KEY_SELLER_SCREEN_INFO, json.encodeToString(it))
+    val popUp: () -> Unit = {
         navController.navigateUp()
     }
 }

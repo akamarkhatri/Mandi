@@ -5,11 +5,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,11 +21,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mandi.R
@@ -43,6 +43,8 @@ import com.mandi.ui.theme.typography
 fun SearchContent(searchContentViewModel: SearchContentViewModel, navigationActions: NavigationActions) {
     val state by searchContentViewModel.searchState.collectAsStateWithLifecycle()
     val focusRequester = remember { FocusRequester() }
+
+//    AppBar
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -51,6 +53,10 @@ fun SearchContent(searchContentViewModel: SearchContentViewModel, navigationActi
     ) {
         state.searchContentInfo?.getType()?.let {
             Card {
+                val backLabel = stringResource(id = R.string.back)
+                IconButton(onClick = { navigationActions.popUp() }, modifier = Modifier.testTag(backLabel)) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = backLabel)
+                }
                 Column(modifier = Modifier
                     .fillMaxWidth()
                     .padding(
@@ -70,7 +76,7 @@ fun SearchContent(searchContentViewModel: SearchContentViewModel, navigationActi
                             modifier = Modifier.weight(1f)
                         )
                         if (state.isLoading) {
-                            CircularProgressIndicator(modifier = Modifier.size(dimensionResource(id = R.dimen.margin_2x)))
+                            CircularProgressIndicator(modifier = Modifier.size(dimensionResource(id = R.dimen.margin_2x)).testTag("Loader"))
                         }
                     }
 
@@ -99,58 +105,64 @@ fun SearchContent(searchContentViewModel: SearchContentViewModel, navigationActi
                     }
                 }
             }
-
             if (state.searchResult.isNotEmpty()) {
-                LazyColumn() {
-                   items(state.searchResult) { itemInfo->
-
-                       Column(modifier = Modifier
-                           .fillMaxWidth()
-                           .clickable {
-                               when (searchContentViewModel.searchContentInfo) {
-                                   is SearchContentInfo.Commodity -> navigationActions.navToSellingScreen(SellingScreenInfo.Commodity(itemInfo as SellingCommodityInfo))
-                                   is SearchContentInfo.Seller -> navigationActions.navToSellingScreen(SellingScreenInfo.Seller(itemInfo as Seller))
-                                   is SearchContentInfo.Village -> navigationActions.navToSellingScreen(SellingScreenInfo.Village(itemInfo as VillageInfo))
-                                   null -> {}
-                               }
-                           }) {
-                           val label = when (searchContentViewModel.searchContentInfo) {
-                               is SearchContentInfo.Commodity -> {
-                                   itemInfo as SellingCommodityInfo
-                                   val commodityMeasurementType =
-                                       itemInfo.commodityDetail.commodityMeasurementType
-                                   val unitResId =
-                                       if (commodityMeasurementType == CommodityMeasurementType.Killogram) {
-                                           R.string.kg
-                                       } else {
-                                           commodityMeasurementType.getMesurementTypeNameResId()
-                                       }
-                                   stringResource(
-                                       id = R.string.x_y_per_z_unit, formatArgs = arrayOf(
-                                           itemInfo.commodityDetail.name,
-                                           itemInfo.pricePerMeasurementType,
-                                           stringResource(id = unitResId)
-                                       )
-                                   )
-                               }
-                               is SearchContentInfo.Seller -> {
-                                   itemInfo as Seller
-                                   "${itemInfo.name} ${itemInfo.getLoyalityCardId()}"
-                               }
-                               is SearchContentInfo.Village -> {
-                                   itemInfo as VillageInfo
-                                   "${itemInfo.name} (${itemInfo.postalCode})"
-                               }
-                               null -> ""
-                           }
-                           Text(text = label,
-                               textStyle = typography.bodyLarge,
-                               modifier = Modifier.padding(dimensionResource(id = R.dimen.margin_2x)))
-                           Divider(color = Neutral50)
-                       }
-                   }
+                LazyColumn(modifier = Modifier.testTag("SearchResult")) {
+                    itemsIndexed(state.searchResult) { index, itemInfo->
+                        Column(modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag("Item_$index")
+                            .clickable {
+                                when (searchContentViewModel.searchContentInfo) {
+                                    is SearchContentInfo.Commodity -> navigationActions.navToSellingScreen(
+                                        SellingScreenInfo.Commodity(itemInfo as SellingCommodityInfo)
+                                    )
+                                    is SearchContentInfo.Seller -> navigationActions.navToSellingScreen(
+                                        SellingScreenInfo.Seller(itemInfo as Seller)
+                                    )
+                                    is SearchContentInfo.Village -> navigationActions.navToSellingScreen(
+                                        SellingScreenInfo.Village(itemInfo as VillageInfo)
+                                    )
+                                    null -> {}
+                                }
+                            }) {
+                            val label = when (searchContentViewModel.searchContentInfo) {
+                                is SearchContentInfo.Commodity -> {
+                                    itemInfo as SellingCommodityInfo
+                                    val commodityMeasurementType =
+                                        itemInfo.commodityDetail.commodityMeasurementType
+                                    val unitResId =
+                                        if (commodityMeasurementType == CommodityMeasurementType.Killogram) {
+                                            R.string.kg
+                                        } else {
+                                            commodityMeasurementType.getMesurementTypeNameResId()
+                                        }
+                                    stringResource(
+                                        id = R.string.x_y_per_z_unit, formatArgs = arrayOf(
+                                            itemInfo.commodityDetail.name,
+                                            itemInfo.pricePerMeasurementType,
+                                            stringResource(id = unitResId)
+                                        )
+                                    )
+                                }
+                                is SearchContentInfo.Seller -> {
+                                    itemInfo as Seller
+                                    "${itemInfo.name} ${itemInfo.getLoyalityCardId()}"
+                                }
+                                is SearchContentInfo.Village -> {
+                                    itemInfo as VillageInfo
+                                    "${itemInfo.name} (${itemInfo.postalCode})"
+                                }
+                                null -> ""
+                            }
+                            Text(text = label,
+                                textStyle = typography.bodyLarge,
+                                modifier = Modifier.padding(dimensionResource(id = R.dimen.margin_2x)))
+                            Divider(color = Neutral50)
+                        }
+                    }
                 }
             }
+
         }
 
     }
