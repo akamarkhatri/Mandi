@@ -121,5 +121,8 @@ dependencies {
         testImplementation(lib)
     }
     testImplementation(Deps.androidx.test.turbine)
+
+    implementation(Deps.androidx.lifeCycleRuntime)
+    implementation(Deps.androidx.lifeCycleExt)
 }
 

@@ -1,15 +1,19 @@
 package com.mandi.base
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.*
+import androidx.lifecycle.lifecycleScope
+import com.mandi.ui.base.compose.DrawableId
+import kotlinx.coroutines.launch
 
 abstract class BaseRobot {
     val composeTestRule by lazy {
         TestHelper.composeTestRule
     }
 
-    fun verifyComposeTextVisible(text: String, useUnmergedTree: Boolean = false) {
-        composeTestRule.onNode(hasText(text, ignoreCase = true), useUnmergedTree).assertIsDisplayed()
+    fun verifyComposeTextVisible(text: String, useUnmergedTree: Boolean = false, isSubstring: Boolean = false) {
+        composeTestRule.onNode(hasText(text, ignoreCase = true, substring = isSubstring), useUnmergedTree).assertIsDisplayed()
     }
 
     fun verifyComposeViewInVisibleOrGone(text: String, subString: Boolean, useUnmergedTree: Boolean = false) {
@@ -149,5 +153,33 @@ abstract class BaseRobot {
 
     fun clickIndexInsideLazyColumn(lazyColumnTestTag: String, index: Int) {
         composeTestRule.onNodeWithTag(lazyColumnTestTag).onChildAt(index).performClick()
+    }
+
+    fun verifyDrawableInComposeIsDisplayed(@DrawableRes id: Int) {
+        composeTestRule.onNode(SemanticsMatcher.expectValue(DrawableId, id)).assertIsDisplayed()
+    }
+
+    fun verifyDrawableInCompose(testTag: String, @DrawableRes id: Int, useUnmergedTree: Boolean = false) {
+        composeTestRule.onNode(
+            hasTestTag(testTag) and SemanticsMatcher.expectValue(DrawableId, id),
+            useUnmergedTree = useUnmergedTree
+        ).assertIsDisplayed()
+    }
+
+    fun verifyDrawableInsideParentInCompose(parentTestTag: String, @DrawableRes id: Int, useUnmergedTree: Boolean = false) {
+        composeTestRule.onNode(
+            hasTestTag(parentTestTag) and hasAnyDescendant(SemanticsMatcher.expectValue(DrawableId, id)),
+            useUnmergedTree = useUnmergedTree
+        ).assertIsDisplayed()
+    }
+
+    fun backPress() {
+        composeTestRule.activity.lifecycleScope.launch {
+            composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    fun verifyActivityStartFinishing() {
+       assert(composeTestRule.activity.isFinishing)
     }
 }

@@ -8,10 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import com.mandi.R
 import com.mandi.ui.base.compose.PrimaryButton
 import com.mandi.ui.base.compose.Text
+import com.mandi.ui.base.compose.drawableId
 import com.mandi.ui.navigation.NavigationActions
 import com.mandi.ui.navigation.SellerInventoryInfo
 import com.mandi.ui.navigation.SellingScreenInfo
@@ -41,6 +43,9 @@ fun SellingComplete(
                 modifier = Modifier
                     .weight(2f)
                     .padding(top = dimensionResource(id = R.dimen.margin_3x))
+                    .semantics {
+                        drawableId = R.drawable.fruit_box
+                    }
             )
             sellerInventoryInfo?.let {
                 Text(
