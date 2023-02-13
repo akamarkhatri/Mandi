@@ -95,6 +95,8 @@ class AndroidXDeps internal constructor() {
     val media = "androidx.media:media:1.6.0"
     val recyclerView = "androidx.recyclerview:recyclerview:1.3.0-rc01"
     val test = AndroidXTestDeps()
+    val lifeCycleRuntime = "androidx.lifecycle:lifecycle-runtime:2.5.1"
+    val lifeCycleExt = "androidx.lifecycle:lifecycle-extensions:2.2.0"
 }
 
 class AndroidXTestDeps internal constructor() {

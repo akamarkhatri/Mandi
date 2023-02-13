@@ -3,10 +3,8 @@ package com.mandi.util
 import com.mandi.model.SellerRegistrationInfo
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
-import java.lang.reflect.Type
 import java.text.NumberFormat
 import java.util.*
-import kotlin.reflect.KClass
 
 val numberFormat by lazy {
     NumberFormat.getInstance(Locale("en", "IN")).apply {

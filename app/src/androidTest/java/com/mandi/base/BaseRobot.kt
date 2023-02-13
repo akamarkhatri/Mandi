@@ -1,23 +1,31 @@
 package com.mandi.base
 
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.*
+import androidx.lifecycle.lifecycleScope
+import com.mandi.ui.base.compose.DrawableId
+import kotlinx.coroutines.launch
 
 abstract class BaseRobot {
-    private val composeTestRule by lazy {
+    val composeTestRule by lazy {
         TestHelper.composeTestRule
     }
 
-    fun verifyComposeTextVisible(text: String, useUnmergedTree: Boolean = false) {
-        composeTestRule.onNode(hasText(text, ignoreCase = true), useUnmergedTree).assertIsDisplayed()
+    fun verifyComposeTextVisible(text: String, useUnmergedTree: Boolean = false, isSubstring: Boolean = false) {
+        composeTestRule.onNode(hasText(text, ignoreCase = true, substring = isSubstring), useUnmergedTree).assertIsDisplayed()
     }
 
-    fun verifyComposeTextInVisibleOrGone(text: String, subString: Boolean, useUnmergedTree: Boolean = false) {
+    fun verifyComposeViewInVisibleOrGone(text: String, subString: Boolean, useUnmergedTree: Boolean = false) {
         composeTestRule.onNode(hasText(text, substring = subString), useUnmergedTree).assertDoesNotExist()
     }
 
-    fun verifyComposeViewVisible(testTag: String) {
-        composeTestRule.onNodeWithTag(testTag).assertIsDisplayed()
+    fun verifyComposeViewVisible(testTag: String, useUnmergedTree: Boolean = false) {
+        composeTestRule.onNodeWithTag(testTag, useUnmergedTree).assertIsDisplayed()
+    }
+
+    fun verifyComposeViewInVisibleOrGone(textTag: String, useUnmergedTree: Boolean = false) {
+        composeTestRule.onNodeWithTag(textTag, useUnmergedTree).assertDoesNotExist()
     }
 
     fun verifyComposeTextVisible(@StringRes stringId: Int, useUnmergedTree: Boolean = false) {
@@ -37,6 +45,10 @@ abstract class BaseRobot {
             .performClick()
     }
 
+    fun clickComposeView(@StringRes testTagResId: Int, useUnmergedTree: Boolean = false) {
+       clickComposeView(composeTestRule.activity.getString(testTagResId), useUnmergedTree)
+    }
+
     fun scrollToAndClickComposeView(testTag: String, useUnmergedTree: Boolean = false) {
         scrollToComposeView(testTag = testTag, useUnmergedTree = useUnmergedTree)
         clickComposeView(testTag = testTag, useUnmergedTree = useUnmergedTree)
@@ -45,6 +57,10 @@ abstract class BaseRobot {
     fun scrollToComposeView(testTag: String, useUnmergedTree: Boolean = false) {
         composeTestRule.onNodeWithTag(testTag = testTag, useUnmergedTree = useUnmergedTree)
             .performScrollTo()
+    }
+
+    fun scrollToComposeView(@StringRes testTag: Int, useUnmergedTree: Boolean = false) {
+       scrollToComposeView(composeTestRule.activity.getString(testTag), useUnmergedTree)
     }
 
     fun scrollToComposeText(text: String, useUnmergedTree: Boolean = false) {
@@ -111,7 +127,59 @@ abstract class BaseRobot {
         composeTestRule.onNodeWithTag(testTag, useUnmergedTree).assertIsNotEnabled()
     }
 
-    fun updateComposeText(testTag: String, text: String) {
+    final fun getStringValue(@StringRes resId: Int): String {
+        return composeTestRule.activity.getString(resId)
+    }
+
+    fun verifyComposeViewEnabled(testTag: String, useUnmergedTree: Boolean = false) {
+        composeTestRule.onNodeWithTag(testTag, useUnmergedTree).assertIsEnabled()
+    }
+
+    fun updateComposeText(testTag: String, text: String, canPerformImeAction: Boolean = false) {
         composeTestRule.onNodeWithTag(testTag).performTextReplacement(text)
+        if (canPerformImeAction) {
+            composeTestRule.onNodeWithTag(testTag).performImeAction()
+        }
+    }
+
+    fun scrollToItemInsideLazyColumn(lazyColumnTestTag: String, itemTestTag: String) {
+        composeTestRule.onNodeWithTag(lazyColumnTestTag).performScrollToNode(hasTestTag(itemTestTag))
+    }
+
+    fun scrollToItemInsideLazyColumnAndClick(lazyColumnTestTag: String, itemTestTag: String) {
+        composeTestRule.onNodeWithTag(lazyColumnTestTag).performScrollToNode(hasTestTag(itemTestTag))
+        clickComposeView(testTag = itemTestTag)
+    }
+
+    fun clickIndexInsideLazyColumn(lazyColumnTestTag: String, index: Int) {
+        composeTestRule.onNodeWithTag(lazyColumnTestTag).onChildAt(index).performClick()
+    }
+
+    fun verifyDrawableInComposeIsDisplayed(@DrawableRes id: Int) {
+        composeTestRule.onNode(SemanticsMatcher.expectValue(DrawableId, id)).assertIsDisplayed()
+    }
+
+    fun verifyDrawableInCompose(testTag: String, @DrawableRes id: Int, useUnmergedTree: Boolean = false) {
+        composeTestRule.onNode(
+            hasTestTag(testTag) and SemanticsMatcher.expectValue(DrawableId, id),
+            useUnmergedTree = useUnmergedTree
+        ).assertIsDisplayed()
+    }
+
+    fun verifyDrawableInsideParentInCompose(parentTestTag: String, @DrawableRes id: Int, useUnmergedTree: Boolean = false) {
+        composeTestRule.onNode(
+            hasTestTag(parentTestTag) and hasAnyDescendant(SemanticsMatcher.expectValue(DrawableId, id)),
+            useUnmergedTree = useUnmergedTree
+        ).assertIsDisplayed()
+    }
+
+    fun backPress() {
+        composeTestRule.activity.lifecycleScope.launch {
+            composeTestRule.activity.onBackPressedDispatcher.onBackPressed()
+        }
+    }
+
+    fun verifyActivityStartFinishing() {
+       assert(composeTestRule.activity.isFinishing)
     }
 }

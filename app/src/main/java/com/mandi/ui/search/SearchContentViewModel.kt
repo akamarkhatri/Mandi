@@ -38,7 +38,6 @@ class SearchContentViewModel @Inject internal constructor(appContainer: AppConta
     var searchContentInfo: SearchContentInfo? = null
 
     fun onQueryChange(query: TextFieldValue) {
-
         logMsg("OnQueryChange ->${query.text}")
         updateState(_searchState.value.copy(
             isLoading = false,
