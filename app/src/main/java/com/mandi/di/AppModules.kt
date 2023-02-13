@@ -1,6 +1,5 @@
 package com.mandi.di
 
-import android.app.Application
 import com.mandi.data.AppContainer
 import com.mandi.data.AppContainerImpl
 import com.mandi.data.DefaultDispatcher
@@ -22,6 +21,7 @@ import javax.inject.Singleton
 class AppModules {
 
     @Provides
+    @Singleton
     fun provideAppContainer(
         sellerRepository: SellerRepository,
         villageRepository: VillageRepository,
@@ -31,21 +31,25 @@ class AppModules {
     }
 
     @Provides
-    fun provideSellerRepository(application: Application, dispatcherProvider: DispatcherProvider): SellerRepository {
+    @Singleton
+    fun provideSellerRepository(dispatcherProvider: DispatcherProvider): SellerRepository {
         return FakeSellerRepository(dispatcherProvider)
     }
 
     @Provides
-    fun provideVillageRepository(application: Application, dispatcherProvider: DispatcherProvider): VillageRepository {
+    @Singleton
+    fun provideVillageRepository(dispatcherProvider: DispatcherProvider): VillageRepository {
         return FakeVillageRepository(dispatcherProvider)
     }
 
     @Provides
-    fun provideCommodityRepository(application: Application, dispatcherProvider: DispatcherProvider): CommodityRepository {
+    @Singleton
+    fun provideCommodityRepository(dispatcherProvider: DispatcherProvider): CommodityRepository {
         return FakeCommodityRepository(dispatcherProvider)
     }
 
     @Provides
+    @Singleton
     fun provideDispatcherProvider(): DispatcherProvider {
         return DefaultDispatcher()
     }
