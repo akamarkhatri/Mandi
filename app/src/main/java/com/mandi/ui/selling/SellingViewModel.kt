@@ -125,13 +125,13 @@ sealed class SellingScreenEvent {
 }
 
 data class SellingScreenState(
-    var isLoading: Boolean = false,
-    var sellerInfo: Seller? = null,
-    var sellingCommodityWt: TextFieldValue = TextFieldValue("", TextRange.Zero),
-    var selectedVillageInfo: VillageInfo? = null,
-    var sellingScreenErrorType: SellingScreenErrorType? = null,
-    var selectedCommodityInfo: SellingCommodityInfo? = null,
-    var grossValue: Float? = null,
+    val isLoading: Boolean = false,
+    val sellerInfo: Seller? = null,
+    val sellingCommodityWt: TextFieldValue = TextFieldValue("", TextRange.Zero),
+    val selectedVillageInfo: VillageInfo? = null,
+    val sellingScreenErrorType: SellingScreenErrorType? = null,
+    val selectedCommodityInfo: SellingCommodityInfo? = null,
+    val grossValue: Float? = null,
     val errorSet: Set<SellingScreenErrorType>? = null
 )
 
